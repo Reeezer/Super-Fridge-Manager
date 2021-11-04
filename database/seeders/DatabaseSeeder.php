@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\Author;
-use App\Models\Book;
+use App\Models\User;
+use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
 
@@ -17,12 +18,12 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         Schema::disableForeignKeyConstraints();
-        Author::truncate();
-        Book::truncate();
+        Category::truncate();
+        Product::truncate();
         Schema::enableForeignKeyConstraints();
 
-        \App\Models\User::factory(10)->create();
-        $this->call(AuthorSeeder::class);
-        $this->call(BookSeeder::class);
+        User::factory(10)->create();
+        $this->call(CategorySeeder::class);
+        $this->call(ProductSeeder::class);
     }
 }
