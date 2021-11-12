@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
+use GuzzleHttp\Handler\Proxy;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -58,7 +60,9 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        //
+        $categories = Category::all();
+        $product = Product::where('id', $id)->firstOrFail();
+        return inertia('Products/Edit', ['product' => $product, 'categories' => $categories]);
     }
 
     /**
@@ -68,9 +72,18 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Product $product)
     {
-        //
+        $request->validate([
+            'name' => 'required|min:5|max:25',
+            'ean_code' => 'required|integer|gt:0',
+            'category_id' => 'required|integer|exists:categories,id',
+            'created_at' => 'required'
+        ]);
+
+        $product->update($request->all());
+
+        return redirect()->route('products.index')->with('success','Product updated successfully');
     }
 
     /**
