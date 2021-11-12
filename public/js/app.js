@@ -23035,7 +23035,7 @@ __webpack_require__.r(__webpack_exports__);
   props: ["products"],
   methods: {
     destroy: function destroy(id) {
-      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_3__.Inertia["delete"](route('products.destroy', id));
+      if (confirm('Are you sure you want to delete this product ?')) _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_3__.Inertia["delete"](route('products.destroy', id));
     },
     daysLeft: function daysLeft(created_at, expiration_days) {
       // TODO Duplicate method

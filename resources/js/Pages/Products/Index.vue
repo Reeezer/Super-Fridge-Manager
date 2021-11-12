@@ -60,7 +60,8 @@ export default {
     ],
     methods: {
         destroy(id) {
-            Inertia.delete(route('products.destroy', id));
+            if (confirm('Are you sure you want to delete this product ?'))
+                Inertia.delete(route('products.destroy', id));
         },
         daysLeft(created_at, expiration_days) { // TODO Duplicate method
             const nbDays = new Date() - new Date(created_at);
