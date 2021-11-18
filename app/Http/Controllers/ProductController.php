@@ -47,9 +47,10 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Product $product)
     {
-        //
+        $product = Product::with('category')->where('id', $product->id)->firstOrFail();
+        return inertia('Products/Show', compact('product'));
     }
 
     /**
