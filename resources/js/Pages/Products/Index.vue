@@ -17,7 +17,6 @@
         <thead>
             <tr>
                 <th scope="col">Name</th>
-                <th scope="col">Code EAN</th>
                 <th scope="col">Days left</th>
                 <th scope="col">Categorie</th>
                 <th scope="col">&nbsp;</th>
@@ -26,13 +25,12 @@
         <tbody>
             <tr v-for="product in sortedArray" :key="product.id">
                 <td>{{product.name}}</td>
-                <td>{{product.ean_code}}</td>
                 <td>{{daysLeft(product.created_at, product.category.expiration_days)}} d</td>
                 <td>{{product.category.name}}</td>
                 <td>
-                    <Link class="btn btn-info" :href="route('products.show', product.id)"><i class="bi bi-arrow-right-circle"></i></Link>
-                    <Link class="btn btn-primary" :href="route('products.edit', product.id)"><i class="bi bi-pencil"></i></Link>
-                    <button @click="destroy(product.id)" class="btn btn-danger"><i class="bi bi-trash"></i></button>
+                    <Link class="btn" :href="route('products.show', product.id)"><i class="bi bi-arrow-right-circle"></i></Link>
+                    <Link class="btn" :href="route('products.edit', product.id)"><i class="bi bi-pencil"></i></Link>
+                    <button @click="destroy(product.id)" class="btn"><i class="bi bi-trash"></i></button>
                 </td>
             </tr>
         </tbody>

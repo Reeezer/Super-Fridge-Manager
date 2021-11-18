@@ -26,7 +26,6 @@
                             <div class="form-group col-12 mt-3">
                                 <strong>Date d'ajout :</strong>
                                 {{ new Date(product.created_at).toISOString().substr(0, 10) }}
-                                <!-- {{ product.created_at }} -->
                             </div>
                             <div class="form-group col-12 mt-3">
                                 <strong>Catégorie :</strong>
