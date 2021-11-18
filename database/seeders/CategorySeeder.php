@@ -21,7 +21,7 @@ class CategorySeeder extends Seeder
             ["name" => "Juice", "expiration_days" => 5],
             ["name" => "Biscuits", "expiration_days" => 730],
             ["name" => "Cheese", "expiration_days" => 30],
-            ["name" => "Paste", "expiration_days" => 365],
+            ["name" => "Pasta", "expiration_days" => 365],
         ];
 
         foreach ($categories as $category){

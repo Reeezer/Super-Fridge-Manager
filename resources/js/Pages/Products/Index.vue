@@ -9,32 +9,20 @@
     </template>
     <!-- Page content here -->
 
-    <h1>Produits</h1>
+    <h1 class="mb-3">Produits</h1>
 
-    <Link :href="route('products.create')" class="btn btn-primary mb-2">Ajouter un produit</Link>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Days left</th>
-                <th scope="col">Categorie</th>
-                <th scope="col">&nbsp;</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="product in sortedArray" :key="product.id">
-                <td>{{product.name}}</td>
-                <td>{{daysLeft(product.created_at, product.category.expiration_days)}} d</td>
-                <td>{{product.category.name}}</td>
-                <td>
-                    <Link class="btn" :href="route('products.show', product.id)"><i class="bi bi-arrow-right-circle"></i></Link>
-                    <Link class="btn" :href="route('products.edit', product.id)"><i class="bi bi-pencil"></i></Link>
-                    <button @click="destroy(product.id)" class="btn"><i class="bi bi-trash"></i></button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="container">
+        <div v-for="product in sortedArray" :key="product.id" class="row align-items-center bg-primary rounded-3 mb-1 p-1">
+            <div class="col"><img id='image' :src="'/images/' + product.category.name.toLowerCase() + '.png'"></div>
+            <div class="col-7">{{product.name}}</div>
+            <div class="col">{{daysLeft(product.created_at, product.category.expiration_days)}} d</div>
+            <div class="col">
+                <Link class="btn" :href="route('products.show', product.id)"><i class="bi bi-arrow-right-circle"></i></Link>
+                <Link class="btn" :href="route('products.edit', product.id)"><i class="bi bi-pencil"></i></Link>
+                <button @click="destroy(product.id)" class="btn"><i class="bi bi-trash"></i></button>
+            </div>
+        </div>
+    </div>
 
     <Pagination class="mt-6" :links="products.links" />
   </breeze-authenticated-layout>
