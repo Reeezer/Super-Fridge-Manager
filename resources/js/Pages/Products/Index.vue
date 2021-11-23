@@ -11,20 +11,31 @@
 
     <h1 class="mb-3">Produits</h1>
 
-    <div class="container">
-        <div v-for="product in sortedArray" :key="product.id" class="row align-items-center bg-primary rounded-3 mb-1 p-1">
-            <div class="col"><img id='image' :src="'/images/' + product.category.name.toLowerCase() + '.png'"></div>
-            <div class="col-7">{{product.name}}</div>
-            <div class="col">{{daysLeft(product.created_at, product.category.expiration_days)}} d</div>
-            <div class="col">
-                <Link class="btn" :href="route('products.show', product.id)"><i class="bi bi-arrow-right-circle"></i></Link>
-                <Link class="btn" :href="route('products.edit', product.id)"><i class="bi bi-pencil"></i></Link>
-                <button @click="destroy(product.id)" class="btn"><i class="bi bi-trash"></i></button>
+    <div v-for="product in sortedArray" :key="product.id" class="d-flex align-items-center justify-content-between bg-primary mb-1 p-2" style="border-radius: 12px; position: relative;">
+        <div class="d-flex align-items-center">
+            <div class="bg-secondary" style="margin-right: 1rem; border-radius: 8px;">
+                <img style="height: 48px;" id='image' :src="'/images/' + product.category.name.toLowerCase() + '.png'">
             </div>
+            <div>{{product.name}}</div>
         </div>
+        <div class="d-flex align-items-center">
+            <button class="btn p-0" style="margin-right: 1rem;" @click="destroy(product.id)">
+                <i class="bi bi-x-lg"></i>
+            </button>
+            <Link class="btn p-0" style="margin-right: 1rem;" :href="route('products.edit', product.id)">
+                <i class="bi bi-pencil"></i>
+            </Link>
+            <div class="expiration-date" style="margin-right: 1rem;" :style="[daysLeft(product.created_at, product.category.expiration_days) <= 3 ? {'color':'red'} : {}]">
+                {{daysLeft(product.created_at, product.category.expiration_days)}} d
+            </div>
+            <Link class="btn p-0" style="margin-right: 1rem;" :href="route('products.show', product.id)">
+                <i class="bi bi-arrow-right-circle"></i>
+            </Link>
+        </div>
+        <div v-if="daysLeft(product.created_at, product.category.expiration_days) <= 3" class="bg-danger expiration-icon" style="position: absolute; right:0; width: 10px; height: 48px; border-radius: 8px 0px 0px 8px;"></div>
     </div>
 
-    <Pagination class="mt-6" :links="products.links" />
+    <Pagination class="mt-3" :links="products.links" />
   </breeze-authenticated-layout>
 </template>
 
@@ -73,4 +84,9 @@ export default {
         }
     }
 }
+
+function checkExpiration() {
+
+}
+
 </script>
