@@ -14,7 +14,7 @@
     <div v-for="(product, index) in sortedArray" :key="product.id" v-bind:id="'div-bg'+index" class="d-flex align-items-center justify-content-between mb-1 p-2" style="border-radius: 12px; position: relative;">
         <div class="d-flex align-items-center">
             <div style="margin-right: 1rem;">
-                <img v-bind:id="'img'+index" style="height: 48px; border-radius: 8px;" :src="'/images/' + product.category.name.toLowerCase() + '.png'">
+                <img v-bind:id="'img'+index" :class="product.category.name" style="height: 48px; border-radius: 8px;" :src="'/resources/images/' + product.category.name.toLowerCase() + '.png'">
             </div>
             <Link class="btn p-0" :href="route('products.show', product.id)">
                 <div>{{product.name}}</div>
@@ -115,11 +115,16 @@ export default {
             let div = document.getElementById('div-bg'+i);
 
             img.addEventListener('load', function() {
-                let color = colorThief.getColor(img);
-                let hsl = rgbToHsl(color[0], color[1], color[2]);
-                console.log(hsl)
-                img.style.backgroundColor = 'hsl(' + hsl[0] + ',' + (hsl[1]-20) + '%, 65%)';
-                div.style.backgroundColor = 'hsl(' + hsl[0] + ',' + (hsl[1]-20) + '%, 85%)';
+                let category = img.className.toLowerCase()
+                let colors = require('/resources/colors.json');
+
+                let hsl;
+                if (colors[category])
+                    hsl = colors[category];
+                else
+                    hsl = colors['default'];
+                img.style.backgroundColor = 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + hsl[2] + '%)';
+                div.style.backgroundColor = 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + (hsl[2] + 20) + '%)';
             });
             i++;
         }
