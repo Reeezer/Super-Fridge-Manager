@@ -1,29 +1,15 @@
 <template>
-  <Head title="Produits" />
+  <Head title="Products" />
 
   <breeze-authenticated-layout>
     <template #header>
       <h2 class="h4 font-weight-bold">
-        Produits
+        Products
       </h2>
     </template>
     <!-- Page content here -->
 
-    <h3 class="mb-3">Catégories</h3>
-
-    <Carousel items-to-show="10" snapAlign="end" >
-        <Slide v-for="category in categories" :key="category">
-            <Link href="">
-                <img :src="'/resources/images/' + category.toLowerCase() + '.png'" :alt="category" :style="'height: 48px; border-radius: 8px;background-color: ' + getDarkColor(category) + ';'">
-            </Link>
-        </Slide>
-
-       <template #addons>
-            <Pagi />
-        </template>
-    </Carousel>
-
-    <h1 class="mb-3">Produits</h1>
+    <h1 class="mb-3">Products</h1>
 
     <div v-for="product in sortedArray" :key="product.id" class="d-flex align-items-center justify-content-between mb-1 p-2" :style="'border-radius: 12px; position: relative; background-color: ' + getPastelColor(product.category.name) + ';'" >
         <div class="d-flex align-items-center">
@@ -58,19 +44,12 @@ import Pagination from '@/Components/Pagination.vue'
 import { Head, Link } from '@inertiajs/inertia-vue3'
 import { Inertia } from '@inertiajs/inertia'
 
-import 'vue3-carousel/dist/carousel.css';
-import { Carousel, Slide, Navigation, Pagination as Pagi } from 'vue3-carousel';
-
 export default {
     components: {
         BreezeAuthenticatedLayout,
         Pagination,
         Head,
-        Link,
-        Carousel,
-        Slide,
-        Navigation,
-        Pagi
+        Link
     },
     props: [
         "products"
@@ -100,9 +79,6 @@ export default {
         getPastelColor(category) {
            let hsl = this.getHSL(category.toLowerCase());
             return 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + (hsl[2]+20) + '%)';
-        },
-        selectCategory(category) {
-
         }
     },
     computed:{
@@ -121,13 +97,6 @@ export default {
             }
 
             return this.products.data.sort((a, b) => compare(days(a.created_at, a.category.expiration_days), days(b.created_at, b.category.expiration_days)));
-        },
-        categories: function() {
-            let categories = [];
-            this.products.data.forEach(function(product) {
-                categories.push(product.category.name);
-            });
-            return new Set(categories);
         }
     }
 }
