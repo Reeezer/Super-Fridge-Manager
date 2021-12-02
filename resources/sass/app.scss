@@ -4,8 +4,22 @@
 // Variables
 @import 'variables';
 
-// Bootstrap
-@import '~bootstrap/scss/bootstrap';
-
 // Custom
 @import "custom";
+
+$spacer: 1rem !default;
+$spacers: () !default;
+$spacers: map-merge(
+  (
+    0: 0,
+    1: ($spacer * .5),
+    2: $spacer,
+    3: ($spacer * 1.5),
+    4: ($spacer * 3),
+    5: ($spacer * 6)
+  ),
+  $spacers
+);
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';

@@ -20,6 +20,10 @@ class ProductSeeder extends Seeder
             ["name" => "Surimi", "ean_code" => '3302747010029', 'category_name' =>"Fish"],
             ["name" => "Knacki", "ean_code" => '7613034926814', 'category_name' => 'Meat'],
             ["name" => "Granolla", "ean_code" => '7622210601988', 'category_name' => 'Biscuits'],
+            ["name" => "Camembert", "ean_code" => '3228023170068', 'category_name' => "Cheese"],
+            ["name" => "Fusili", "ean_code" => '3302747010029', 'category_name' =>"Pasta"],
+            ["name" => "Jambon", "ean_code" => '7613034926814', 'category_name' => 'Meat'],
+            ["name" => "Colin", "ean_code" => '7622210601988', 'category_name' => 'Fish'],
         ];
 
         foreach ($products as $product){

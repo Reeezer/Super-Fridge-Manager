@@ -18,6 +18,14 @@
             <breeze-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
               Dashboard
             </breeze-nav-link>
+
+            <breeze-nav-link :href="route('products.index')" :active="route().current('products.*')">
+              Produits
+            </breeze-nav-link>
+
+            <breeze-nav-link :href="route('products.create')" :active="route().current('products.create')">
+              Ajouter produit
+            </breeze-nav-link>
           </ul>
 
           <!-- Right Side Of Navbar -->
@@ -44,15 +52,8 @@
       </div>
     </nav>
 
-    <!-- Page Heading -->
-    <header class="d-flex py-3 bg-white shadow-sm border-bottom">
-      <div class="container">
-        <slot name="header" />
-      </div>
-    </header>
-
     <!-- Page Content -->
-    <main class="container my-5">
+    <main class="container my-3">
       <slot />
     </main>
   </div>
