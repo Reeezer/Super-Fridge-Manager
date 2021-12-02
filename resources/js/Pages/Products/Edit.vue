@@ -25,8 +25,8 @@
                                     />
                                 </div>
                                 <div class="form-group col-12 mt-3">
-                                    <label for="exampleFormControlSelect1">Catégorie</label> <!-- TODO changer nom -->
-                                    <select v-model="form.category_id" class="form-control" id="exampleFormControlSelect1">
+                                    <label>Catégorie</label>
+                                    <select v-model="form.category_id" class="form-control">
                                         <option v-for="category in categories" :key="category.id" :value="category.id">
                                             {{category.name}}
                                         </option>
@@ -65,6 +65,7 @@ import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue'
 import { Head, useForm, Link } from '@inertiajs/inertia-vue3'
 import InputLabel from '@/Components/Form/InputLabel.vue'
 import InputDate from '@/Components/Form/InputDate.vue'
+import { notify } from "@kyvg/vue3-notification"
 
 export default {
     components: {

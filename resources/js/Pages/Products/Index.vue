@@ -9,19 +9,7 @@
     </template>
     <!-- Page content here -->
 
-    <h3 class="mb-3">Catégories</h3>
-
-    <Carousel items-to-show="10" snapAlign="end" >
-        <Slide v-for="category in categories" :key="category">
-            <Link href="">
-                <img :src="'/resources/images/' + category.toLowerCase() + '.png'" :alt="category" :style="'height: 48px; border-radius: 8px;background-color: ' + getDarkColor(category) + ';'">
-            </Link>
-        </Slide>
-
-       <template #addons>
-            <Pagi />
-        </template>
-    </Carousel>
+    <notifications position='bottom left' width="30%" duration="2" />
 
     <h1 class="mb-3">Produits</h1>
 
@@ -57,28 +45,28 @@ import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue'
 import Pagination from '@/Components/Pagination.vue'
 import { Head, Link } from '@inertiajs/inertia-vue3'
 import { Inertia } from '@inertiajs/inertia'
-
-import 'vue3-carousel/dist/carousel.css';
-import { Carousel, Slide, Navigation, Pagination as Pagi } from 'vue3-carousel';
+import { notify } from "@kyvg/vue3-notification"
 
 export default {
     components: {
         BreezeAuthenticatedLayout,
         Pagination,
         Head,
-        Link,
-        Carousel,
-        Slide,
-        Navigation,
-        Pagi
+        Link
     },
     props: [
         "products"
     ],
     methods: {
         destroy(id) {
-            if (confirm('Are you sure you want to delete this product ?'))
+            if (confirm('Are you sure you want to delete this product ?')){
                 Inertia.delete(route('products.destroy', id));
+                notify({
+                    title: '<b>Delete</b>',
+                    text: 'The product has been successfully deleted',
+                    type: 'success',
+                });
+            }
         },
         daysLeft(created_at, expiration_days) { // TODO Duplicate method
             const nbDays = new Date() - new Date(created_at);
@@ -100,9 +88,6 @@ export default {
         getPastelColor(category) {
            let hsl = this.getHSL(category.toLowerCase());
             return 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + (hsl[2]+20) + '%)';
-        },
-        selectCategory(category) {
-
         }
     },
     computed:{
@@ -121,13 +106,6 @@ export default {
             }
 
             return this.products.data.sort((a, b) => compare(days(a.created_at, a.category.expiration_days), days(b.created_at, b.category.expiration_days)));
-        },
-        categories: function() {
-            let categories = [];
-            this.products.data.forEach(function(product) {
-                categories.push(product.category.name);
-            });
-            return new Set(categories);
         }
     }
 }
