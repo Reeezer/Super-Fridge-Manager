@@ -9,15 +9,29 @@
     </template>
     <!-- Page content here -->
 
+    <h3 class="mb-3">Catégories</h3>
+
+    <Carousel items-to-show="10" snapAlign="end" >
+        <Slide v-for="category in categories" :key="category">
+            <Link href="">
+                <img :src="'/resources/images/' + category.toLowerCase() + '.png'" :alt="category" :style="'height: 48px; border-radius: 8px;background-color: ' + getDarkColor(category) + ';'">
+            </Link>
+        </Slide>
+
+       <template #addons>
+            <Pagi />
+        </template>
+    </Carousel>
+
     <h1 class="mb-3">Produits</h1>
 
-    <div v-for="(product, index) in sortedArray" :key="product.id" v-bind:id="'div-bg'+index" class="d-flex align-items-center justify-content-between mb-1 p-2" style="border-radius: 12px; position: relative;">
+    <div v-for="product in sortedArray" :key="product.id" class="d-flex align-items-center justify-content-between mb-1 p-2" :style="'border-radius: 12px; position: relative; background-color: ' + getPastelColor(product.category.name) + ';'" >
         <div class="d-flex align-items-center">
             <div style="margin-right: 1rem;">
-                <img v-bind:id="'img'+index" :class="product.category.name" style="height: 48px; border-radius: 8px;" :src="'/resources/images/' + product.category.name.toLowerCase() + '.png'">
+                <img :class="product.category.name" :style="'height: 48px; border-radius: 8px; background-color: ' + getDarkColor(product.category.name) + ';'" :src="'/resources/images/' + product.category.name.toLowerCase() + '.png'">
             </div>
             <Link class="btn p-0" :href="route('products.show', product.id)">
-                <div>{{product.name}}</div>
+                <div>{{ product.name }}</div>
             </Link>
         </div>
         <div class="d-flex align-items-center">
@@ -28,7 +42,7 @@
                 <i class="bi bi-pencil"></i>
             </Link>
             <div class="expiration-date" style="margin-right: 0.5rem;" :style="[daysLeft(product.created_at, product.category.expiration_days) <= 3 ? {'color':'red'} : {}]">
-                {{daysLeft(product.created_at, product.category.expiration_days)}} d
+                {{ daysLeft(product.created_at, product.category.expiration_days) }} d
             </div>
         </div>
         <div v-if="daysLeft(product.created_at, product.category.expiration_days) <= 3" class="bg-danger expiration-icon" style="position: absolute; right:0; width: 10px; height: 48px; border-radius: 8px 0px 0px 8px;"></div>
@@ -44,12 +58,19 @@ import Pagination from '@/Components/Pagination.vue'
 import { Head, Link } from '@inertiajs/inertia-vue3'
 import { Inertia } from '@inertiajs/inertia'
 
+import 'vue3-carousel/dist/carousel.css';
+import { Carousel, Slide, Navigation, Pagination as Pagi } from 'vue3-carousel';
+
 export default {
     components: {
         BreezeAuthenticatedLayout,
         Pagination,
         Head,
         Link,
+        Carousel,
+        Slide,
+        Navigation,
+        Pagi
     },
     props: [
         "products"
@@ -63,6 +84,26 @@ export default {
             const nbDays = new Date() - new Date(created_at);
             return expiration_days - Math.floor(nbDays / (1000 * 3600 * 24));
         },
+        getHSL(category) {
+            let colors = require('/resources/colors.json');
+            let hsl;
+            if (colors[category])
+                hsl = colors[category];
+            else
+                hsl = colors['default'];
+            return hsl;
+        },
+        getDarkColor(category) {
+            let hsl = this.getHSL(category.toLowerCase());
+            return 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + hsl[2] + '%)';
+        },
+        getPastelColor(category) {
+           let hsl = this.getHSL(category.toLowerCase());
+            return 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + (hsl[2]+20) + '%)';
+        },
+        selectCategory(category) {
+
+        }
     },
     computed:{
         sortedArray: function() {
@@ -80,29 +121,13 @@ export default {
             }
 
             return this.products.data.sort((a, b) => compare(days(a.created_at, a.category.expiration_days), days(b.created_at, b.category.expiration_days)));
-        }
-    },
-    mounted() {
-        var i = 0;
-        while (document.getElementById('img'+i))
-        {
-            let img = document.getElementById('img'+i);
-            let div = document.getElementById('div-bg'+i);
-
-            img.addEventListener('load', function() {
-                let category = img.className.toLowerCase()
-                let colors = require('/resources/colors.json');
-
-                let hsl;
-                if (colors[category])
-                    hsl = colors[category];
-                else
-                    hsl = colors['default'];
-                img.style.backgroundColor = 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + hsl[2] + '%)';
-                div.style.backgroundColor = 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + (hsl[2] + 20) + '%)';
+        },
+        categories: function() {
+            let categories = [];
+            this.products.data.forEach(function(product) {
+                categories.push(product.category.name);
             });
-
-            i++;
+            return new Set(categories);
         }
     }
 }
