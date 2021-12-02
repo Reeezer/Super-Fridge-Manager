@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use \Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -42,13 +43,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    /**
-         * Get all of the products for the User
-         *
-         * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
-         */
-        public function products(): HasManyThrough
-        {
-            return $this->hasManyThrough(Product::class, UserHas::class);
-        }
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'user_has');
+    }
 }
