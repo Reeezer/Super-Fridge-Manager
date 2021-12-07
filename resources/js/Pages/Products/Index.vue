@@ -1,15 +1,15 @@
 <template>
-  <Head title="Produits" />
+  <Head title="Products" />
 
   <breeze-authenticated-layout>
     <template #header>
       <h2 class="h4 font-weight-bold">
-        Produits
+        Products
       </h2>
     </template>
     <!-- Page content here -->
 
-    <h1 class="mb-3">Produits</h1>
+    <h1 class="mb-3">Products</h1>
 
     <div v-for="product in sortedArray" :key="product.id" class="d-flex align-items-center justify-content-between mb-1 p-2" :style="'border-radius: 12px; position: relative; background-color: ' + getPastelColor(product.category.name) + ';'" >
         <div class="d-flex align-items-center">
@@ -43,7 +43,6 @@ import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue'
 import Pagination from '@/Components/Pagination.vue'
 import { Head, Link } from '@inertiajs/inertia-vue3'
 import { Inertia } from '@inertiajs/inertia'
-import { notify } from "@kyvg/vue3-notification"
 
 export default {
     components: {
@@ -81,8 +80,12 @@ export default {
                 hsl = colors['default'];
             return hsl;
         },
+        getDarkColor(category) {
+            let hsl = this.getHSL(category.toLowerCase());
+            return 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + hsl[2] + '%)';
+        },
         getPastelColor(category) {
-           let hsl = this.getHSL(category.toLowerCase());
+            let hsl = this.getHSL(category.toLowerCase());
             return 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + (hsl[2]+20) + '%)';
         }
     },

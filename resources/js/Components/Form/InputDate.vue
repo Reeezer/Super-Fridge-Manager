@@ -1,11 +1,11 @@
 <template>
-    <label :for="inputId">{{ labelText }}</label>
+    <label :for="inputId" class=mb-1>{{ labelText }}</label>
     <input
         :value="getDate"
         @input="$emit('update:modelValue', $event.target.value)"
         type="date"
         class="form-control"
-        :class="formError ? 'is-invalid' : ''"
+        :class="formError ? 'is-invalid' : '' + ' bg-light'"
         :id="inputId"
     >
     <BreezeInputError :message="formError" />

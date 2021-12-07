@@ -1,5 +1,5 @@
 <template>
-    <label :for="inputId">{{ labelText }}</label>
+    <label :for="inputId" class="mb-1">{{ labelText }}</label>
     <input
         :value="modelValue"
         @input="$emit('update:modelValue', $event.target.value)"
