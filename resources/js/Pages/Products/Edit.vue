@@ -25,7 +25,7 @@
                                     />
                                 </div>
                                 <div class="form-group col-12 mt-3">
-                                    <label class="mb-1">Category</label> <!-- TODO changer nom -->
+                                    <label class="mb-1">Category</label>
                                     <select v-model="form.category_id" class="form-control">
                                         <option v-for="category in categories" :key="category.id" :value="category.id">
                                             {{category.name}}

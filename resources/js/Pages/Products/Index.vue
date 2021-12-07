@@ -51,13 +51,21 @@ export default {
         Head,
         Link
     },
-    props: [
-        "products"
-    ],
+    props: ["products"],
     methods: {
         destroy(id) {
-            if (confirm('Are you sure you want to delete this product ?'))
-                Inertia.delete(route('products.destroy', id));
+            if (confirm('Are you sure you want to delete this product ?')){
+                Inertia.delete(route('products.destroy', id), {
+                    onSuccess: (page) => {
+                        notify({
+                            title: '<b>Delete</b>',
+                            text: 'The product has been successfully deleted',
+                            type: 'success',
+                        });
+                    }
+                });
+
+            }
         },
         daysLeft(created_at, expiration_days) { // TODO Duplicate method
             const nbDays = new Date() - new Date(created_at);
@@ -77,7 +85,7 @@ export default {
             return 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + hsl[2] + '%)';
         },
         getPastelColor(category) {
-           let hsl = this.getHSL(category.toLowerCase());
+            let hsl = this.getHSL(category.toLowerCase());
             return 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + (hsl[2]+20) + '%)';
         }
     },
