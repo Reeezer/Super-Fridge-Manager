@@ -11,24 +11,16 @@
 
     <h3 class="mb-3">Catégories</h3>
 
-    <Carousel items-to-show="10" snapAlign="end" >
-        <Slide v-for="category in categories" :key="category">
-            <Link href="">
-                <img :src="'/resources/images/' + category.toLowerCase() + '.png'" :alt="category" :style="'height: 48px; border-radius: 8px;background-color: ' + getDarkColor(category) + ';'">
-            </Link>
-        </Slide>
-
-       <template #addons>
-            <Pagi />
-        </template>
-    </Carousel>
+    <div class="d-flex flex-row justify-content">
+        <CategoryImage v-for="category in categories" :key="category" :category="category" style="margin-right: 1rem;"></CategoryImage>
+    </div>
 
     <h1 class="mb-3">Produits</h1>
 
     <div v-for="product in sortedArray" :key="product.id" class="d-flex align-items-center justify-content-between mb-1 p-2" :style="'border-radius: 12px; position: relative; background-color: ' + getPastelColor(product.category.name) + ';'" >
         <div class="d-flex align-items-center">
             <div style="margin-right: 1rem;">
-                <img :class="product.category.name" :style="'height: 48px; border-radius: 8px; background-color: ' + getDarkColor(product.category.name) + ';'" :src="'/resources/images/' + product.category.name.toLowerCase() + '.png'">
+                <CategoryImage :category="product.category.name"></CategoryImage>
             </div>
             <Link class="btn p-0" :href="route('products.show', product.id)">
                 <div>{{ product.name }}</div>
@@ -57,9 +49,7 @@ import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue'
 import Pagination from '@/Components/Pagination.vue'
 import { Head, Link } from '@inertiajs/inertia-vue3'
 import { Inertia } from '@inertiajs/inertia'
-
-import 'vue3-carousel/dist/carousel.css';
-import { Carousel, Slide, Navigation, Pagination as Pagi } from 'vue3-carousel';
+import CategoryImage from '@/Components/CategoryImage.vue'
 
 export default {
     components: {
@@ -67,14 +57,9 @@ export default {
         Pagination,
         Head,
         Link,
-        Carousel,
-        Slide,
-        Navigation,
-        Pagi
+        CategoryImage
     },
-    props: [
-        "products"
-    ],
+    props: ["products"],
     methods: {
         destroy(id) {
             if (confirm('Are you sure you want to delete this product ?'))
