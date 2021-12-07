@@ -65,7 +65,6 @@ import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue'
 import { Head, useForm, Link } from '@inertiajs/inertia-vue3'
 import InputLabel from '@/Components/Form/InputLabel.vue'
 import InputDate from '@/Components/Form/InputDate.vue'
-import { notify } from "@kyvg/vue3-notification"
 
 export default {
     components: {

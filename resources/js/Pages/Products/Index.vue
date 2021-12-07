@@ -9,8 +9,6 @@
     </template>
     <!-- Page content here -->
 
-    <notifications position='bottom left' width="30%" duration="2" />
-
     <h1 class="mb-3">Produits</h1>
 
     <div v-for="product in sortedArray" :key="product.id" class="d-flex align-items-center justify-content-between mb-1 p-2" :style="'border-radius: 12px; position: relative; background-color: ' + getPastelColor(product.category.name) + ';'" >
@@ -54,18 +52,20 @@ export default {
         Head,
         Link
     },
-    props: [
-        "products"
-    ],
+    props: ["products"],
     methods: {
         destroy(id) {
             if (confirm('Are you sure you want to delete this product ?')){
-                Inertia.delete(route('products.destroy', id));
-                notify({
-                    title: '<b>Delete</b>',
-                    text: 'The product has been successfully deleted',
-                    type: 'success',
+                Inertia.delete(route('products.destroy', id), {
+                    onSuccess: (page) => {
+                        notify({
+                            title: '<b>Delete</b>',
+                            text: 'The product has been successfully deleted',
+                            type: 'success',
+                        });
+                    }
                 });
+
             }
         },
         daysLeft(created_at, expiration_days) { // TODO Duplicate method
@@ -80,10 +80,6 @@ export default {
             else
                 hsl = colors['default'];
             return hsl;
-        },
-        getDarkColor(category) {
-            let hsl = this.getHSL(category.toLowerCase());
-            return 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + hsl[2] + '%)';
         },
         getPastelColor(category) {
            let hsl = this.getHSL(category.toLowerCase());
