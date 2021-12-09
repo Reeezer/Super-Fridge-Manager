@@ -49,7 +49,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        $product = auth()->user()->products()->with('category')->where('id', $product->id)->firstOrFail();
+        $product = auth()->user()->products()->with('category')->where('product_id', $product->id)->firstOrFail();
         return inertia('Products/Show', compact('product'));
     }
 
@@ -82,6 +82,13 @@ class ProductController extends Controller
             'created_at' => 'required'
         ]);
 
+        $product->update($request->all());
+        return redirect()->route('products.index')->with('success','Product updated successfully'); // TODO Remove with
+    }
+
+    // TODO ne pas oublier d'ajouter la route, utiliser POST
+    public function updateUserProduct(Request $request, Product $product)
+    {
         // $user_has = UserHas::where([
         //     ['user_id', auth()->user()->id],
         //     ['product_id', $product->id]
@@ -89,9 +96,7 @@ class ProductController extends Controller
 
         // $user_has->update();
 
-        $product->update($request->all());
-
-        return redirect()->route('products.index')->with('success','Product updated successfully'); // TODO Remove with
+        // print_r($request);
     }
 
     /**
