@@ -23206,11 +23206,7 @@ __webpack_require__.r(__webpack_exports__);
       return 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + (hsl[2] + 20) + '%)';
     },
     selectCategory: function selectCategory(category) {
-      if (this.search.includes(category)) {
-        this.search = "";
-      } else {
-        this.search = category;
-      }
+      this.search = this.search.includes(category) ? "" : category;
     }
   },
   computed: {
