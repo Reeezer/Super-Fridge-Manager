@@ -5384,11 +5384,6 @@
     "@vue/server-renderer" "3.2.21"
     "@vue/shared" "3.2.21"
 
-"vue3-carousel@^0.1.32":
-  "integrity" "sha512-/SYlkCYsviUHANiCHoQoi3e5PXx+2+aUB5MfDhUcam4+T+RvhcHED+aR6SUA+uBHgbbb24JF1H7grEX8+nlu3g=="
-  "resolved" "https://registry.npmjs.org/vue3-carousel/-/vue3-carousel-0.1.32.tgz"
-  "version" "0.1.32"
-
 "watchpack@^2.2.0":
   "integrity" "sha512-up4YAn/XHgZHIxFBVCdlMiWDj6WaLKpwVeGQk2I5thdYxF/KmF0aaz6TfJZ/hfl1h/XlcDr7k1KH7ThDagpFaA=="
   "resolved" "https://registry.npmjs.org/watchpack/-/watchpack-2.2.0.tgz"
