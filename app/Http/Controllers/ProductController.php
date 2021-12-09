@@ -87,7 +87,7 @@ class ProductController extends Controller
     }
 
     // TODO ne pas oublier d'ajouter la route, utiliser POST
-    public function updateUserProduct(Request $request, Product $product)
+    public function updateUserProduct(Request $request)
     {
         // $user_has = UserHas::where([
         //     ['user_id', auth()->user()->id],
@@ -95,8 +95,7 @@ class ProductController extends Controller
         // ])->firstOrFail();
 
         // $user_has->update();
-
-        // print_r($request);
+        print_r($request);
     }
 
     /**

@@ -31,5 +31,6 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::resource('/products', ProductController::class);
+Route::post('/products/user_update', [ProductController::class, 'updateUserProduct'])->name('products.user_update');
 
 require __DIR__.'/auth.php';
