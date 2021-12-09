@@ -23180,9 +23180,19 @@ __webpack_require__.r(__webpack_exports__);
     CategoryImage: _Components_CategoryImage_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
   },
   props: ["products"],
+  data: function data() {
+    return {
+      elements: [],
+      search: ""
+    };
+  },
   methods: {
     destroy: function destroy(id) {
-      if (confirm('Are you sure you want to delete this product ?')) _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_3__.Inertia["delete"](route('products.destroy', id));
+      if (confirm('Are you sure you want to delete this product ?')) {
+        _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_3__.Inertia["delete"](route('products.destroy', id));
+        this.search = "";
+        this.elements = this.products.data;
+      }
     },
     daysLeft: function daysLeft(created_at, expiration_days) {
       // TODO Duplicate method
@@ -23204,7 +23214,17 @@ __webpack_require__.r(__webpack_exports__);
       var hsl = this.getHSL(category.toLowerCase());
       return 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + (hsl[2] + 20) + '%)';
     },
-    selectCategory: function selectCategory(category) {}
+    selectCategory: function selectCategory(category) {
+      if (this.search.includes(category)) {
+        this.search = "";
+        this.elements = this.products.data;
+      } else {
+        this.search = category;
+        this.elements = this.elements.filter(function (product) {
+          if (product) return product.category.name == category;
+        });
+      }
+    }
   },
   computed: {
     sortedArray: function sortedArray() {
@@ -23231,6 +23251,9 @@ __webpack_require__.r(__webpack_exports__);
       });
       return new Set(categories);
     }
+  },
+  mounted: function mounted() {
+    this.elements = this.products.data;
   }
 });
 
@@ -24999,7 +25022,7 @@ var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
 );
 
 var _hoisted_3 = {
-  "class": "d-flex flex-row justify-content"
+  "class": "d-flex flex-row justify-content flex-wrap mb-2"
 };
 
 var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", {
@@ -25065,18 +25088,33 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [_hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.categories, function (category) {
-        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_CategoryImage, {
+        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Link, {
           key: category,
-          category: category,
-          style: {
-            "margin-right": "1rem"
+          "class": "m-1",
+          modelValue: $data.search,
+          "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
+            return $data.search = $event;
+          }),
+          onClick: function onClick($event) {
+            return $options.selectCategory(category);
           }
-        }, null, 8
-        /* PROPS */
-        , ["category"]);
+        }, {
+          "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+            return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_CategoryImage, {
+              category: category
+            }, null, 8
+            /* PROPS */
+            , ["category"])];
+          }),
+          _: 2
+          /* DYNAMIC */
+
+        }, 1032
+        /* PROPS, DYNAMIC_SLOTS */
+        , ["modelValue", "onClick"]);
       }), 128
       /* KEYED_FRAGMENT */
-      ))]), _hoisted_4, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.sortedArray, function (product) {
+      ))]), _hoisted_4, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.elements, function (product) {
         return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
           key: product.id,
           "class": "d-flex align-items-center justify-content-between mb-1 p-2",

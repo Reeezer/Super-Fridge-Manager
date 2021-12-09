@@ -11,13 +11,15 @@
 
     <h3 class="mb-3">Catégories</h3>
 
-    <div class="d-flex flex-row justify-content">
-        <CategoryImage v-for="category in categories" :key="category" :category="category" style="margin-right: 1rem;"></CategoryImage>
+    <div class="d-flex flex-row justify-content flex-wrap mb-2">
+        <Link v-for="category in categories" :key="category" class="m-1" v-model="search" @click="selectCategory(category)">
+            <CategoryImage :category="category"></CategoryImage>
+        </Link>
     </div>
 
     <h1 class="mb-3">Produits</h1>
 
-    <div v-for="product in sortedArray" :key="product.id" class="d-flex align-items-center justify-content-between mb-1 p-2" :style="'border-radius: 12px; position: relative; background-color: ' + getPastelColor(product.category.name) + ';'" >
+    <div v-for="product in elements" :key="product.id" class="d-flex align-items-center justify-content-between mb-1 p-2" :style="'border-radius: 12px; position: relative; background-color: ' + getPastelColor(product.category.name) + ';'" >
         <div class="d-flex align-items-center">
             <div style="margin-right: 1rem;">
                 <CategoryImage :category="product.category.name"></CategoryImage>
@@ -60,10 +62,20 @@ export default {
         CategoryImage
     },
     props: ["products"],
+    data() {
+        return {
+            elements: [],
+            search: ""
+        };
+    },
     methods: {
         destroy(id) {
             if (confirm('Are you sure you want to delete this product ?'))
+            {
                 Inertia.delete(route('products.destroy', id));
+                this.search = "";
+                this.elements = this.products.data;
+            }
         },
         daysLeft(created_at, expiration_days) { // TODO Duplicate method
             const nbDays = new Date() - new Date(created_at);
@@ -87,7 +99,20 @@ export default {
             return 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + (hsl[2]+20) + '%)';
         },
         selectCategory(category) {
+            if (this.search.includes(category))
+            {
+                this.search = "";
+                this.elements = this.products.data;
+            }
+            else
+            {
+                this.search = category;
 
+                this.elements = this.elements.filter(function(product){
+                    if (product)
+                        return product.category.name == category;
+                });
+            }
         }
     },
     computed:{
@@ -114,6 +139,9 @@ export default {
             });
             return new Set(categories);
         }
+    },
+    mounted() {
+        this.elements = this.products.data;
     }
 }
 
