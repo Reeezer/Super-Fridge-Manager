@@ -49,7 +49,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        $product = Product::with('category')->where('id', $product->id)->firstOrFail();
+        $product = auth()->user()->products()->with('category')->where('id', $product->id)->firstOrFail();
         return inertia('Products/Show', compact('product'));
     }
 
@@ -62,7 +62,7 @@ class ProductController extends Controller
     public function edit($id)
     {
         $categories = Category::all();
-        $product = Product::where('id', $id)->firstOrFail();
+        $product = auth()->user()->products()->with('category')->where('id', $id)->firstOrFail();
         return inertia('Products/Edit', ['product' => $product, 'categories' => $categories]);
     }
 
@@ -81,6 +81,13 @@ class ProductController extends Controller
             'category_id' => 'required|integer|exists:categories,id',
             'created_at' => 'required'
         ]);
+
+        // $user_has = UserHas::where([
+        //     ['user_id', auth()->user()->id],
+        //     ['product_id', $product->id]
+        // ])->firstOrFail();
+
+        // $user_has->update();
 
         $product->update($request->all());
 
