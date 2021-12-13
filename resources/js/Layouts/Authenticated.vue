@@ -2,23 +2,10 @@
   <div>
     <nav class="navbar navbar-expand-md navbar-light bg-white border-bottom sticky-top">
       <div class="container">
-        <!-- Logo -->
-        <a class="navbar-brand" href="/">
-          <Link :href="route('dashboard')">
-            <breeze-application-logo width="36" />
-          </Link>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-          <span class="navbar-toggler-icon"></span>
-        </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <!-- Left Side Of Navbar -->
           <ul class="navbar-nav me-auto">
-            <breeze-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
-              Dashboard
-            </breeze-nav-link>
-
             <breeze-nav-link :href="route('products.index')" :active="route().current('products.*')">
               Products
             </breeze-nav-link>
@@ -52,7 +39,7 @@
       </div>
     </nav>
 
-    <notifications position='bottom left' width="30%" duration="4" />
+    <notifications position='bottom left' width="30%" height="5%" duration="4" />
 
     <!-- Page Content -->
     <main class="container my-3">
@@ -62,7 +49,6 @@
 </template>
 
 <script>
-import BreezeApplicationLogo from '@/Components/ApplicationLogo.vue'
 import BreezeDropdown from '@/Components/Dropdown.vue'
 import BreezeDropdownLink from '@/Components/DropdownLink.vue'
 import BreezeNavLink from '@/Components/NavLink.vue'
@@ -71,7 +57,6 @@ import { Inertia } from '@inertiajs/inertia'
 
 export default {
   components: {
-    BreezeApplicationLogo,
     BreezeDropdown,
     BreezeDropdownLink,
     BreezeNavLink,
