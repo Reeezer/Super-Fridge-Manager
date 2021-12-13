@@ -1,15 +1,15 @@
 <template>
-  <Head title="Produits" />
+  <Head title="Products" />
 
   <breeze-authenticated-layout>
     <template #header>
       <h2 class="h4 font-weight-bold">
-        Produits
+        Products
       </h2>
     </template>
     <!-- Page content here -->
 
-    <h3 class="mb-3">Catégories</h3>
+    <h3 class="mb-3">Categories</h3>
 
     <div class="d-flex flex-row justify-content flex-wrap mb-2">
         <b-button v-for="category in categories" :key="category" class="m-1" @click.capture="selectCategory(category)" style="cursor: pointer;">
@@ -17,7 +17,7 @@
         </b-button>
     </div>
 
-    <h1 class="mb-3">Produits</h1>
+    <h1 class="mb-3">Products</h1>
 
     <div v-for="product in sortedArray" :key="product.id" class="d-flex align-items-center justify-content-between mb-1 p-2" :style="'border-radius: 12px; position: relative; background-color: ' + getPastelColor(product.category.name) + ';'" >
         <div class="d-flex align-items-center">
@@ -68,6 +68,20 @@ export default {
         };
     },
     methods: {
+        destroy(id) {
+            if (confirm('Are you sure you want to delete this product ?')){
+                Inertia.delete(route('products.destroy', id), {
+                    onSuccess: (page) => {
+                        notify({
+                            title: '<b>Delete</b>',
+                            text: 'The product has been successfully deleted',
+                            type: 'success',
+                        });
+                    }
+                });
+
+            }
+        },
         daysLeft(created_at, expiration_days) { // TODO Duplicate method
             const nbDays = new Date() - new Date(created_at);
             return expiration_days - Math.floor(nbDays / (1000 * 3600 * 24));
@@ -86,7 +100,7 @@ export default {
             return hsl;
         },
         getPastelColor(category) {
-           let hsl = this.getHSL(category.toLowerCase());
+            let hsl = this.getHSL(category.toLowerCase());
             return 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + (hsl[2]+20) + '%)';
         },
         selectCategory(category) {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\UserHas;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -15,7 +16,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with('category')->latest()->paginate(20);
+        $products = auth()->user()->products()->with('category')->latest()->paginate(20);
         return inertia('Products/Index', compact('products'));
     }
 
@@ -83,7 +84,7 @@ class ProductController extends Controller
 
         $product->update($request->all());
 
-        return redirect()->route('products.index')->with('success','Product updated successfully');
+        return redirect()->route('products.index')->with('success','Product updated successfully'); // TODO Remove with
     }
 
     /**
@@ -97,6 +98,6 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $product->delete();
 
-        return redirect()->route('products.index')->with('success','Product deleted successfully');
+        return redirect()->route('products.index')->with('success','Product deleted successfully'); // TODO Remove with
     }
 }

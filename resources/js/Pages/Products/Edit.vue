@@ -1,14 +1,14 @@
 <template>
-    <Head title="Modifier un produit" />
+    <Head title="Modify a product" />
 
     <breeze-authenticated-layout>
         <template #header>
             <h2 class="h4 font-weight-bold">
-                Modifier un produit
+                Modify a product
             </h2>
         </template>
 
-        <Link :href="route('products.index')" class="btn btn-primary mb-2">Retour</Link>
+        <Link :href="route('products.index')" class="btn btn-primary mb-2">Back</Link>
 
         <form @submit.prevent="form.put(route('products.update', product))">
             <div class="row">
@@ -20,13 +20,13 @@
                                     <InputLabel
                                         v-model="form.name"
                                         :inputId="'inputName'"
-                                        :labelText="'Nom'"
+                                        :labelText="'Name'"
                                         :formError="form.errors.name"
                                     />
                                 </div>
                                 <div class="form-group col-12 mt-3">
-                                    <label for="exampleFormControlSelect1">Catégorie</label> <!-- TODO changer nom -->
-                                    <select v-model="form.category_id" class="form-control" id="exampleFormControlSelect1">
+                                    <label class="mb-1">Category</label>
+                                    <select v-model="form.category_id" class="form-control">
                                         <option v-for="category in categories" :key="category.id" :value="category.id">
                                             {{category.name}}
                                         </option>
@@ -37,7 +37,7 @@
                                     <InputLabel
                                             v-model="form.ean_code"
                                             :inputId="'inputEan_code'"
-                                            :labelText="'Code EAN'"
+                                            :labelText="'EAN code'"
                                             :formError="form.errors.ean_code"
                                         />
                                 </div>
@@ -45,7 +45,7 @@
                                     <InputDate
                                             v-model="form.created_at"
                                             :inputId="'inputCreated_at'"
-                                            :labelText="'Date d\'ajout'"
+                                            :labelText="'Add date'"
                                             :formError="form.errors.created_at"
                                         />
                                 </div>

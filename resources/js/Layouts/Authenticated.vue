@@ -20,11 +20,11 @@
             </breeze-nav-link>
 
             <breeze-nav-link :href="route('products.index')" :active="route().current('products.*')">
-              Produits
+              Products
             </breeze-nav-link>
 
             <breeze-nav-link :href="route('products.create')" :active="route().current('products.create')">
-              Ajouter produit
+              Add a product
             </breeze-nav-link>
           </ul>
 
@@ -52,9 +52,11 @@
       </div>
     </nav>
 
+    <notifications position='bottom left' width="30%" duration="4" />
+
     <!-- Page Content -->
     <main class="container my-3">
-      <slot />
+        <slot/>
     </main>
   </div>
 </template>
