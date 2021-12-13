@@ -23683,6 +23683,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @inertiajs/inertia-vue3 */ "./node_modules/@inertiajs/inertia-vue3/dist/index.js");
 /* harmony import */ var _Components_Form_InputLabel_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/Components/Form/InputLabel.vue */ "./resources/js/Components/Form/InputLabel.vue");
 /* harmony import */ var _Components_Form_InputDate_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/Components/Form/InputDate.vue */ "./resources/js/Components/Form/InputDate.vue");
+/* harmony import */ var _Components_CategoryImage_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/Components/CategoryImage.vue */ "./resources/js/Components/CategoryImage.vue");
+
 
 
 
@@ -23693,7 +23695,8 @@ __webpack_require__.r(__webpack_exports__);
     Head: _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.Head,
     Link: _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.Link,
     InputLabel: _Components_Form_InputLabel_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
-    InputDate: _Components_Form_InputDate_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
+    InputDate: _Components_Form_InputDate_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
+    CategoryImage: _Components_CategoryImage_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
   },
   props: ['product', 'categories'],
   data: function data() {
@@ -23793,6 +23796,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     sortedArray: function sortedArray() {
       var _this = this;
 
+      console.log(this.products.data);
+
       function compare(a, b) {
         if (a < b) return -1;
         if (a > b) return 1;
@@ -23838,24 +23843,7 @@ __webpack_require__.r(__webpack_exports__);
     Head: _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.Head,
     Link: _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.Link
   },
-  props: ['product'],
-  methods: {
-    getHSL: function getHSL(category) {
-      var colors = __webpack_require__(/*! ../../resources/colors.json */ "./public/resources/colors.json");
-
-      var hsl;
-      if (colors[category]) hsl = colors[category];else hsl = colors['default'];
-      return hsl;
-    },
-    getDarkColor: function getDarkColor(category) {
-      var hsl = this.getHSL(category.toLowerCase());
-      return 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + hsl[2] + '%)';
-    },
-    getPastelColor: function getPastelColor(category) {
-      var hsl = this.getHSL(category.toLowerCase());
-      return 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + (hsl[2] + 20) + '%)';
-    }
-  }
+  props: ['product']
 });
 
 /***/ }),
@@ -25347,6 +25335,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   var _component_InputLabel = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("InputLabel");
 
+  var _component_CategoryImage = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("CategoryImage");
+
   var _component_InputDate = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("InputDate");
 
   var _component_breeze_authenticated_layout = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("breeze-authenticated-layout");
@@ -25393,8 +25383,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
           key: category.id,
           value: category.id
-        }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(category.name), 9
-        /* TEXT, PROPS */
+        }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_CategoryImage, {
+          category: category.name
+        }, null, 8
+        /* PROPS */
+        , ["category"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(category.name), 1
+        /* TEXT */
+        )], 8
+        /* PROPS */
         , _hoisted_11);
       }), 128
       /* KEYED_FRAGMENT */

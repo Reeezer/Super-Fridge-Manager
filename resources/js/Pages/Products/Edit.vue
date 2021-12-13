@@ -28,6 +28,7 @@
                                     <label class="mb-1">Category</label>
                                     <select v-model="form.category_id" class="form-control">
                                         <option v-for="category in categories" :key="category.id" :value="category.id">
+                                             <CategoryImage :category="category.name"></CategoryImage>
                                             {{category.name}}
                                         </option>
                                     </select>
@@ -65,6 +66,7 @@ import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue'
 import { Head, useForm, Link } from '@inertiajs/inertia-vue3'
 import InputLabel from '@/Components/Form/InputLabel.vue'
 import InputDate from '@/Components/Form/InputDate.vue'
+import CategoryImage from '@/Components/CategoryImage.vue'
 
 export default {
     components: {
@@ -72,7 +74,8 @@ export default {
         Head,
         Link,
         InputLabel,
-        InputDate
+        InputDate,
+        CategoryImage
     },
 
     props: ['product', 'categories'],

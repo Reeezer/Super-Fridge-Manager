@@ -116,6 +116,8 @@ export default {
             return new Set(categories);
         },
         sortedArray: function() {
+            console.log(this.products.data)
+
             function compare(a, b) {
                 if (a < b)
                     return -1;

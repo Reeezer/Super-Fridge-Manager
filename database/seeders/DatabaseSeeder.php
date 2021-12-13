@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\UserHas;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Database\Seeder;
@@ -20,6 +21,8 @@ class DatabaseSeeder extends Seeder
         Schema::disableForeignKeyConstraints();
         Category::truncate();
         Product::truncate();
+        User::truncate();
+        UserHas::truncate();
         Schema::enableForeignKeyConstraints();
 
         $this->call(CategorySeeder::class);
