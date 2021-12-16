@@ -10,9 +10,9 @@
               Products
             </breeze-nav-link>
 
-            <!-- <breeze-nav-link :href="route('products.favorites')" :active="route().current('products.*')">
+            <breeze-nav-link :href="route('favorites.index')" :active="route().current('favorites.*')">
               Favorites
-            </breeze-nav-link> -->
+            </breeze-nav-link>
 
             <breeze-nav-link :href="route('products.create')" :active="route().current('products.create')">
               Add a product

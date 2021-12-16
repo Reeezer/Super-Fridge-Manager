@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use App\Models\Favorite;
 use App\Models\Product;
 use App\Models\UserHas;
 use Illuminate\Http\Request;
@@ -84,7 +83,7 @@ class ProductController extends Controller
         ]);
 
         $product->update($request->all());
-        return redirect()->route('products.index')->with('success','Product updated successfully'); // TODO Remove with
+        return redirect()->route('products.index');
     }
 
     // TODO ne pas oublier d'ajouter la route, utiliser POST
@@ -98,7 +97,7 @@ class ProductController extends Controller
         // $user_has->update();
         var_dump($product);
         return "";
-        //return redirect()->route('products.index')->with('product', $product);
+        //return redirect()->route('products.index');
     }
 
     /**
@@ -112,31 +111,6 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $product->delete();
 
-        return redirect()->route('products.index')->with('success','Product deleted successfully'); // TODO Remove with
-    }
-
-    /**
-     * Display a listing of the favorite resources.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function favorites()
-    {
-        $products = auth()->user()->favorites()->with('category')->latest()->paginate(20);
-        return inertia('Products/Favorites', compact('products'));
-    }
-
-    /**
-     * Remove the specified favorite resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function removeFavorite($id)
-    {
-        $favorite = Favorite::findOrFail($id);
-        $favorite->delete();
-
-        return redirect()->route('favorites')->with('success','Favorite deleted successfully'); // TODO Remove with
+        return redirect()->route('products.index');
     }
 }

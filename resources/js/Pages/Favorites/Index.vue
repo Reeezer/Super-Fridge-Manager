@@ -27,7 +27,7 @@
             <div>{{ product.name }}</div>
         </div>
         <div class="d-flex align-items-center">
-            <button class="btn p-0" style="margin-right: 1rem;" @click="removeFavorite(product.id)">
+            <button class="btn p-0" style="margin-right: 1rem;" @click="destroy(product)">
                 <i class="bi bi-heart-fill"></i>
             </button>
         </div>
@@ -43,6 +43,7 @@ import Pagination from '@/Components/Pagination.vue'
 import { Head, Link } from '@inertiajs/inertia-vue3'
 import { Inertia } from '@inertiajs/inertia'
 import CategoryImage from '@/Components/CategoryImage.vue'
+import { notify } from "@kyvg/vue3-notification"
 
 export default {
     components: {
@@ -59,22 +60,15 @@ export default {
         };
     },
     methods: {
-        destroy(id) {
-            if (confirm('Are you sure you want to delete this product ?')){
-                Inertia.delete(route('products.destroy', id), {
-                    onSuccess: (page) => {
-                        notify({
-                            title: '<b>Delete</b>',
-                            text: 'The product has been successfully deleted',
-                            type: 'success',
-                        });
-                    }
+        destroy(product) {
+            if (confirm('Are you sure you want to remove this favorite ?')){
+                notify({
+                    title: '<b>Remove</b>',
+                    text: "The favorite '" + product.name + "' has been successfully removed !",
+                    type: 'success',
                 });
-
+                Inertia.delete(route('favorites.destroy', product.id));
             }
-        },
-        removeFavorite(id) {
-            Inertia.delete(route('products.removeFavorite', id))
         },
         getHSL(category) {
             let colors = require('/resources/colors.json');

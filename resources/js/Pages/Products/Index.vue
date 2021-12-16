@@ -52,6 +52,7 @@ import Pagination from '@/Components/Pagination.vue'
 import { Head, Link } from '@inertiajs/inertia-vue3'
 import { Inertia } from '@inertiajs/inertia'
 import CategoryImage from '@/Components/CategoryImage.vue'
+import { notify } from "@kyvg/vue3-notification"
 
 export default {
     components: {
@@ -70,15 +71,12 @@ export default {
     methods: {
         destroy(id) {
             if (confirm('Are you sure you want to delete this product ?')){
-                Inertia.delete(route('products.destroy', id), {
-                    onSuccess: (page) => {
-                        notify({
-                            title: '<b>Delete</b>',
-                            text: 'The product has been successfully deleted',
-                            type: 'success',
-                        });
-                    }
+                notify({
+                    title: '<b>Delete</b>',
+                    text: 'The product has been successfully deleted',
+                    type: 'success',
                 });
+                Inertia.delete(route('products.destroy', id));
 
             }
         },
