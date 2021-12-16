@@ -10,37 +10,14 @@
 
         <Link :href="route('products.index')" class="btn btn-primary mb-2">Back</Link>
 
-        <form @submit.prevent="form.put(route('products.update', product))">
+        <form @submit.prevent="form.post(route('products.user_update', product))">
             <div class="row">
                 <div class="col-12 col-lg-6 offset-0 offset-lg-3">
                     <div class="card">
                         <div class="card-body">
                             <div class="form-row">
-                                <div class="form-group col-12">
-                                    <InputLabel
-                                        v-model="form.name"
-                                        :inputId="'inputName'"
-                                        :labelText="'Name'"
-                                        :formError="form.errors.name"
-                                    />
-                                </div>
-                                <div class="form-group col-12 mt-3">
-                                    <label class="mb-1">Category</label>
-                                    <select v-model="form.category_id" class="form-control">
-                                        <option v-for="category in categories" :key="category.id" :value="category.id">
-                                            {{category.name}}
-                                        </option>
-                                    </select>
-                                    <div v-if="form.errors.category_id">{{form.errors.category_id}}</div>
-                                </div>
-                                <div class="form-group col-12 mt-3">
-                                    <InputLabel
-                                            v-model="form.ean_code"
-                                            :inputId="'inputEan_code'"
-                                            :labelText="'EAN code'"
-                                            :formError="form.errors.ean_code"
-                                        />
-                                </div>
+                                <div class="form-group col-12 mt-3">{{product.name}}</div>
+                                
                                 <div class="form-group col-12 mt-3">
                                     <InputDate
                                             v-model="form.created_at"

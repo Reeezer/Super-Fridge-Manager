@@ -62,7 +62,7 @@ class ProductController extends Controller
     public function edit($id)
     {
         $categories = Category::all();
-        $product = auth()->user()->products()->with('category')->where('id', $id)->firstOrFail();
+        $product = auth()->user()->products()->with('category')->where('product_id', $id)->firstOrFail();
         return inertia('Products/Edit', ['product' => $product, 'categories' => $categories]);
     }
 
@@ -87,15 +87,17 @@ class ProductController extends Controller
     }
 
     // TODO ne pas oublier d'ajouter la route, utiliser POST
-    public function updateUserProduct(Request $request)
+    public function updateUserProduct(Request $request, Product $product)
     {
-        // $user_has = UserHas::where([
-        //     ['user_id', auth()->user()->id],
-        //     ['product_id', $product->id]
-        // ])->firstOrFail();
+        $user_has = UserHas::where([
+            ['user_id', auth()->user()->id],
+            ['product_id', $product->id]
+        ])->first();
 
         // $user_has->update();
-        print_r($request);
+        var_dump($product);
+        return "";
+        //return redirect()->route('products.index')->with('product', $product);
     }
 
     /**
