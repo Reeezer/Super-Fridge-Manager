@@ -26,10 +26,6 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::resource('/products', ProductController::class);
 Route::post('/products/user_update', [ProductController::class, 'updateUserProduct'])->name('products.user_update');
 

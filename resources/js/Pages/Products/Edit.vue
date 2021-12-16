@@ -16,8 +16,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="form-row">
-                                <div class="form-group col-12 mt-3">{{product.name}}</div>
-                                
+                                <div class="form-group col-12 mt-3">{{product.name}}</div>       
                                 <div class="form-group col-12 mt-3">
                                     <InputDate
                                             v-model="form.created_at"
@@ -42,6 +41,7 @@ import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue'
 import { Head, useForm, Link } from '@inertiajs/inertia-vue3'
 import InputLabel from '@/Components/Form/InputLabel.vue'
 import InputDate from '@/Components/Form/InputDate.vue'
+import CategoryImage from '@/Components/CategoryImage.vue'
 
 export default {
     components: {
@@ -49,7 +49,8 @@ export default {
         Head,
         Link,
         InputLabel,
-        InputDate
+        InputDate,
+        CategoryImage
     },
 
     props: ['product', 'categories'],

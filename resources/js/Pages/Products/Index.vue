@@ -9,12 +9,20 @@
     </template>
     <!-- Page content here -->
 
+    <h3 class="mb-3">Categories</h3>
+
+    <div class="d-flex flex-row justify-content flex-wrap mb-2">
+        <b-button v-for="category in categories" :key="category" class="m-1" @click.capture="selectCategory(category)" style="cursor: pointer;">
+            <CategoryImage :category="category" v-bind:style="[category.includes(search) ? 'opacity: 1.0' : 'opacity: 0.3']"></CategoryImage>
+        </b-button>
+    </div>
+
     <h1 class="mb-3">Products</h1>
 
     <div v-for="product in sortedArray" :key="product.id" class="d-flex align-items-center justify-content-between mb-1 p-2" :style="'border-radius: 12px; position: relative; background-color: ' + getPastelColor(product.category.name) + ';'" >
         <div class="d-flex align-items-center">
             <div style="margin-right: 1rem;">
-                <img :class="product.category.name" :style="'height: 48px; border-radius: 8px; background-color: ' + getDarkColor(product.category.name) + ';'" :src="'/resources/images/' + product.category.name.toLowerCase() + '.png'">
+                <CategoryImage :category="product.category.name"></CategoryImage>
             </div>
             <Link class="btn p-0" :href="route('products.show', product.id)">
                 <div>{{ product.name }}</div>
@@ -43,15 +51,22 @@ import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue'
 import Pagination from '@/Components/Pagination.vue'
 import { Head, Link } from '@inertiajs/inertia-vue3'
 import { Inertia } from '@inertiajs/inertia'
+import CategoryImage from '@/Components/CategoryImage.vue'
 
 export default {
     components: {
         BreezeAuthenticatedLayout,
         Pagination,
         Head,
-        Link
+        Link,
+        CategoryImage
     },
     props: ["products"],
+    data() {
+        return {
+            search: "",
+        };
+    },
     methods: {
         destroy(id) {
             if (confirm('Are you sure you want to delete this product ?')){
@@ -71,6 +86,10 @@ export default {
             const nbDays = new Date() - new Date(created_at);
             return expiration_days - Math.floor(nbDays / (1000 * 3600 * 24));
         },
+        destroy(id) {
+            if (confirm('Are you sure you want to delete this product ?'))
+                Inertia.delete(route('products.destroy', id));
+        },
         getHSL(category) {
             let colors = require('/resources/colors.json');
             let hsl;
@@ -80,17 +99,25 @@ export default {
                 hsl = colors['default'];
             return hsl;
         },
-        getDarkColor(category) {
-            let hsl = this.getHSL(category.toLowerCase());
-            return 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + hsl[2] + '%)';
-        },
         getPastelColor(category) {
             let hsl = this.getHSL(category.toLowerCase());
             return 'hsl(' + hsl[0] + ',' + hsl[1] + '%,' + (hsl[2]+20) + '%)';
+        },
+        selectCategory(category) {
+            this.search = this.search.includes(category) ? "" : category;
         }
     },
     computed:{
+        categories: function() {
+            let categories = [];
+            this.products.data.forEach(function(product) {
+                categories.push(product.category.name);
+            });
+            return new Set(categories);
+        },
         sortedArray: function() {
+            console.log(this.products.data)
+
             function compare(a, b) {
                 if (a < b)
                     return -1;
@@ -104,7 +131,11 @@ export default {
                 return expiration_days - Math.floor(nbDays / (1000 * 3600 * 24));
             }
 
-            return this.products.data.sort((a, b) => compare(days(a.created_at, a.category.expiration_days), days(b.created_at, b.category.expiration_days)));
+            let filteredProducts = this.products.data.filter(product => {
+                return product.category.name.includes(this.search);
+            });
+
+            return filteredProducts.sort((a, b) => compare(days(a.created_at, a.category.expiration_days), days(b.created_at, b.category.expiration_days)));
         }
     }
 }
