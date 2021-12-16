@@ -16,7 +16,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="form-row">
-                                <div class="form-group col-12 mt-3">{{product.name}}</div>       
+                                <div class="form-group col-12 mt-3">{{product.name}}</div>
                                 <div class="form-group col-12 mt-3">
                                     <InputDate
                                             v-model="form.created_at"
@@ -26,7 +26,7 @@
                                         />
                                 </div>
 
-                                <button type="submit" class="btn btn-primary mt-3" :disabled="form.processing">Modifier</button>
+                                <button type="submit" class="btn btn-primary mt-3" @click="notifyUpdate()" :disabled="form.processing">Modifier</button>
                             </div>
                         </div>
                     </div>
@@ -63,6 +63,11 @@ export default {
                 ean_code: this.product.ean_code,
                 created_at: this.product.created_at,
             })
+        }
+    },
+    methods: {
+        notifyUpdate() {
+            window.localStorage.setItem('update', this.product.name); // to notify index of the update
         }
     }
 }

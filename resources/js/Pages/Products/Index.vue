@@ -29,7 +29,7 @@
             </Link>
         </div>
         <div class="d-flex align-items-center">
-            <button class="btn p-0" style="margin-right: 1rem;" @click="destroy(product.id)">
+            <button class="btn p-0" style="margin-right: 1rem;" @click="destroyProduct(product)">
                 <i class="bi bi-x-lg"></i>
             </button>
             <Link class="btn p-0" style="margin-right: 1rem;" :href="route('products.edit', product.id)">
@@ -52,6 +52,7 @@ import Pagination from '@/Components/Pagination.vue'
 import { Head, Link } from '@inertiajs/inertia-vue3'
 import { Inertia } from '@inertiajs/inertia'
 import CategoryImage from '@/Components/CategoryImage.vue'
+import { notify } from "@kyvg/vue3-notification"
 
 export default {
     components: {
@@ -68,27 +69,26 @@ export default {
         };
     },
     methods: {
-        destroy(id) {
+        destroyProduct(product) {
             if (confirm('Are you sure you want to delete this product ?')){
-                Inertia.delete(route('products.destroy', id), {
-                    onSuccess: (page) => {
-                        notify({
-                            title: '<b>Delete</b>',
-                            text: 'The product has been successfully deleted',
-                            type: 'success',
-                        });
-                    }
+                notify({
+                    title: '<b>Delete</b>',
+                    text: "The product '" + product.name + "' has been successfully deleted !",
+                    type: 'success',
                 });
-
+                Inertia.delete(route('products.destroy', product.id));
+            }
+            else {
+                notify({
+                    title: '<b>Delete</b>',
+                    text: "The product '" + product.name + "' has not been deleted ...",
+                    type: 'warn',
+                });
             }
         },
         daysLeft(created_at, expiration_days) { // TODO Duplicate method
             const nbDays = new Date() - new Date(created_at);
             return expiration_days - Math.floor(nbDays / (1000 * 3600 * 24));
-        },
-        destroy(id) {
-            if (confirm('Are you sure you want to delete this product ?'))
-                Inertia.delete(route('products.destroy', id));
         },
         getHSL(category) {
             let colors = require('/resources/colors.json');
@@ -116,8 +116,6 @@ export default {
             return new Set(categories);
         },
         sortedArray: function() {
-            console.log(this.products.data)
-
             function compare(a, b) {
                 if (a < b)
                     return -1;
@@ -136,6 +134,18 @@ export default {
             });
 
             return filteredProducts.sort((a, b) => compare(days(a.created_at, a.category.expiration_days), days(b.created_at, b.category.expiration_days)));
+        }
+    },
+    mounted() {
+        let updatedProduct = window.localStorage.getItem('update');
+        if (updatedProduct != null)
+        {
+            window.localStorage.removeItem('update');
+            notify({
+                title: '<b>Update</b>',
+                text: "The product '" + updatedProduct + "' has been successfully updated !",
+                type: 'success',
+            });
         }
     }
 }
