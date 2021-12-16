@@ -23,7 +23,7 @@
               Products
             </breeze-nav-link>
 
-            <breeze-nav-link :href="route('products.create')" :active="route().current('products.create')">
+            <breeze-nav-link :href="route('products.create')" :active="route().current('products.*')">
               Add a product
             </breeze-nav-link>
           </ul>

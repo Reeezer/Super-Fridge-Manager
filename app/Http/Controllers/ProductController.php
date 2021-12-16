@@ -27,7 +27,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::all();
+        return inertia('Products/Create', compact('categories'));
     }
 
     /**
@@ -38,7 +39,18 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|min:5|max:25',
+            'ean_code' => 'required|integer|gt:0',
+            'category_id' => 'required|integer|exists:categories,id',
+            'created_at' => 'required'
+        ]);
+
+
+        Product::create($request->all());
+
+        return redirect()->route('products.index')
+            ->with('success','Product created successfully.');
     }
 
     /**
