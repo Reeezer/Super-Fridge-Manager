@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\BookController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -26,7 +26,9 @@ Route::get('/', function () {
     ]);
 });
 
-Route::resource('/products', ProductController::class);
-Route::post('/products/user_update', [ProductController::class, 'updateUserProduct'])->name('products.user_update');
+Route::post('products/user_update', [ProductController::class, 'updateUserProduct'])->name('products.user_update');
+Route::resource('products', ProductController::class);
+
+Route::resource('favorites', FavoriteController::class);
 
 require __DIR__.'/auth.php';

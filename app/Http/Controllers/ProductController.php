@@ -16,7 +16,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = auth()->user()->products()->with('category')->latest()->paginate(20);
+        $products = auth()->user()->products()->with('category', 'favorite')->latest()->paginate(20);
+        $favorites = auth()->user()->favorites()->with('category')->latest()->paginate(20);
+        // print_r($favorites);
         return inertia('Products/Index', compact('products'));
     }
 
@@ -85,7 +87,7 @@ class ProductController extends Controller
         ]);
 
         $product->update($request->all());
-        return redirect()->route('products.index')->with('success','Product updated successfully'); // TODO Remove with
+        return redirect()->route('products.index');
     }
 
     // TODO ne pas oublier d'ajouter la route, utiliser POST
@@ -114,6 +116,6 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $product->delete();
 
-        return redirect()->route('products.index')->with('success','Product deleted successfully'); // TODO Remove with
+        return redirect()->route('products.index');
     }
 }

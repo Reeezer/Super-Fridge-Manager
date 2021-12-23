@@ -10,6 +10,10 @@
               Products
             </breeze-nav-link>
 
+            <breeze-nav-link :href="route('favorites.index')" :active="route().current('favorites.*')">
+              Favorites
+            </breeze-nav-link>
+
             <breeze-nav-link :href="route('products.create')" :active="route().current('products.create')">
               Add a product
             </breeze-nav-link>
@@ -39,7 +43,7 @@
       </div>
     </nav>
 
-    <notifications position='bottom left' width="30%" height="5%" duration="4" />
+    <notifications position='bottom left' width="40%" height="5%" duration="4" />
 
     <!-- Page Content -->
     <main class="container my-3">
