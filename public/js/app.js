@@ -23696,7 +23696,6 @@ __webpack_require__.r(__webpack_exports__);
   props: ["categories"],
   data: function data() {
     return {
-      test: "cest un test",
       form: (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.useForm)({
         name: null,
         category_id: null,
@@ -23733,7 +23732,9 @@ __webpack_require__.r(__webpack_exports__);
         Quagga.start();
       });
       Quagga.onDetected(function (data) {
-        document.getElementById("inputEan_code").value = data.codeResult.code;
+        var inputEan = document.getElementById("inputEan_code");
+        inputEan.value = data.codeResult.code;
+        inputEan.dispatchEvent(new Event('input'));
         Quagga.stop();
       });
     }

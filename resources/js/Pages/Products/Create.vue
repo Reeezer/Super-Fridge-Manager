@@ -6,9 +6,7 @@
             <h2 class="h4 font-weight-bold">Add a product</h2>
         </template>
 
-        <Link :href="route('products.index')" class="btn btn-primary mb-2"
-            >Back</Link
-        >
+        <Link :href="route('products.index')" class="btn btn-primary mb-2">Back</Link>
 
         <form @submit.prevent="form.post(route('products.store'))">
           <div id="camera"></div>
@@ -111,7 +109,6 @@ export default {
 
     data() {
         return {
-            test: "cest un test",
             form: useForm({
                 name: null,
                 category_id: null,
@@ -133,7 +130,7 @@ export default {
                             height: 480,
                             facingMode: "user", // or user
                         },
-                        
+
                         target: document.querySelector("#camera"),
                     },
                     decoder: {
@@ -152,7 +149,9 @@ export default {
             );
 
             Quagga.onDetected(function (data) {
-                document.getElementById("inputEan_code").value = data.codeResult.code;
+                let inputEan = document.getElementById("inputEan_code")
+                inputEan.value = data.codeResult.code;
+                inputEan.dispatchEvent(new Event('input'));
                 Quagga.stop();
             });
         },
