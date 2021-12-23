@@ -29,9 +29,19 @@
             </Link>
         </div>
         <div class="d-flex align-items-center">
+            <!-- Favorites -->
+            <button v-if="product.favorite" class="btn p-0" style="margin-right: 1rem;" @click="removeFavorite(product.id)">
+                <i class="bi bi-heart-fill"></i>
+            </button>
+            <button v-else class="btn p-0" style="margin-right: 1rem;" @click="addFavorite(product.id)">
+                <i class="bi bi-heart"></i>
+            </button>
+
+            <!-- Remove -->
             <button class="btn p-0" style="margin-right: 1rem;" @click="destroy(product.id)">
                 <i class="bi bi-x-lg"></i>
             </button>
+
             <Link class="btn p-0" style="margin-right: 1rem;" :href="route('products.edit', product.id)">
                 <i class="bi bi-pencil"></i>
             </Link>
@@ -80,6 +90,12 @@ export default {
 
             }
         },
+        removeFavorite(id) {
+            Inertia.delete(route('favorites.destroy', 'products'));
+        },
+        addFavorite(id) {
+
+        },
         daysLeft(created_at, expiration_days) { // TODO Duplicate method
             const nbDays = new Date() - new Date(created_at);
             return expiration_days - Math.floor(nbDays / (1000 * 3600 * 24));
@@ -110,6 +126,8 @@ export default {
             return new Set(categories);
         },
         sortedArray: function() {
+            console.log(this.products.data);
+
             function compare(a, b) {
                 if (a < b)
                     return -1;

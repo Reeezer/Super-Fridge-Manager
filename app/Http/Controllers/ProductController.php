@@ -16,7 +16,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = auth()->user()->products()->with('category')->latest()->paginate(20);
+        $products = auth()->user()->products()->with('category', 'favorite')->latest()->paginate(20);
+        $favorites = auth()->user()->favorites()->with('category')->latest()->paginate(20);
+        // print_r($favorites);
         return inertia('Products/Index', compact('products'));
     }
 

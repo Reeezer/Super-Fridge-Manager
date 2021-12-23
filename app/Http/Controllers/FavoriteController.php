@@ -14,8 +14,8 @@ class FavoriteController extends Controller
      */
     public function index()
     {
-        $products = auth()->user()->favorites()->with('category')->latest()->paginate(20);
-        return inertia('Favorites/Index', compact('products'));
+        $favorites = auth()->user()->favorites()->with('category')->latest()->paginate(20);
+        return inertia('Favorites/Index', compact('favorites'));
     }
 
     /**

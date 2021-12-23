@@ -1,10 +1,10 @@
 <template>
-  <Head title="Products" />
+  <Head title="Favorites" />
 
   <breeze-authenticated-layout>
     <template #header>
       <h2 class="h4 font-weight-bold">
-        Products
+        Favorites
       </h2>
     </template>
     <!-- Page content here -->
@@ -17,23 +17,23 @@
         </b-button>
     </div>
 
-    <h1 class="mb-3">Products</h1>
+    <h1 class="mb-3">Favorites</h1>
 
-    <div v-for="product in sortedArray" :key="product.id" class="d-flex align-items-center justify-content-between mb-1 p-2" :style="'border-radius: 12px; position: relative; background-color: ' + getPastelColor(product.category.name) + ';'" >
+    <div v-for="favorite in sortedArray" :key="favorite.id" class="d-flex align-items-center justify-content-between mb-1 p-2" :style="'border-radius: 12px; position: relative; background-color: ' + getPastelColor(favorite.category.name) + ';'" >
         <div class="d-flex align-items-center">
             <div style="margin-right: 1rem;">
-                <CategoryImage :category="product.category.name"></CategoryImage>
+                <CategoryImage :category="favorite.category.name"></CategoryImage>
             </div>
-            <div>{{ product.name }}</div>
+            <div>{{ favorite.name }}</div>
         </div>
         <div class="d-flex align-items-center">
-            <button class="btn p-0" style="margin-right: 1rem;" @click="destroy(product)">
+            <button class="btn p-0" style="margin-right: 1rem;" @click="removeFavorite(favorite)">
                 <i class="bi bi-heart-fill"></i>
             </button>
         </div>
     </div>
 
-    <Pagination class="mt-3" :links="products.links" />
+    <Pagination class="mt-3" :links="favorites.links" />
   </breeze-authenticated-layout>
 </template>
 
@@ -53,21 +53,21 @@ export default {
         Link,
         CategoryImage
     },
-    props: ["products"],
+    props: ["favorites"],
     data() {
         return {
             search: "",
         };
     },
     methods: {
-        destroy(product) {
+        removeFavorite(favorite) {
             if (confirm('Are you sure you want to remove this favorite ?')){
                 notify({
                     title: '<b>Remove</b>',
-                    text: "The favorite '" + product.name + "' has been successfully removed !",
+                    text: "The product '" + favorite.name + "' has been successfully removed from favorites !",
                     type: 'success',
                 });
-                Inertia.delete(route('favorites.destroy', product.id));
+                Inertia.delete(route('favorites.destroy', favorite.id));
             }
         },
         getHSL(category) {
@@ -90,14 +90,16 @@ export default {
     computed:{
         categories: function() {
             let categories = [];
-            this.products.data.forEach(function(product) {
-                categories.push(product.category.name);
+            this.favorites.data.forEach(function(favorite) {
+                categories.push(favorite.category.name);
             });
             return new Set(categories);
         },
         sortedArray: function() {
-            return this.products.data.filter(product => {
-                return product.category.name.includes(this.search);
+            console.log(this.favorites.data);
+
+            return this.favorites.data.filter(favorite => {
+                return favorite.category.name.includes(this.search);
             });
         }
     }

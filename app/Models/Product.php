@@ -17,4 +17,9 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    function favorite()
+    {
+        return $this->belongsTo(Favorite::class, 'id', 'product_id');
+    }
 }
