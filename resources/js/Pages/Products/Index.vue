@@ -45,11 +45,11 @@
             <Link class="btn p-0" style="margin-right: 1rem;" :href="route('products.edit', product.id)">
                 <i class="bi bi-pencil"></i>
             </Link>
-            <div class="expiration-date" style="margin-right: 0.5rem;" :style="[daysLeft(product.created_at, product.category.expiration_days) <= 3 ? {'color':'red'} : {}]">
-                {{ daysLeft(product.created_at, product.category.expiration_days) }} d
+            <div class="expiration-date" style="margin-right: 0.5rem;" :style="[daysLeft(product.pivot.added_date, product.category.expiration_days) <= 3 ? {'color':'red'} : {}]">
+                {{ daysLeft(product.pivot.added_date, product.category.expiration_days) }} d
             </div>
         </div>
-        <div v-if="daysLeft(product.created_at, product.category.expiration_days) <= 3" class="bg-danger expiration-icon" style="position: absolute; right:0; width: 10px; height: 48px; border-radius: 8px 0px 0px 8px;"></div>
+        <div v-if="daysLeft(product.pivot.added_date, product.category.expiration_days) <= 3" class="bg-danger expiration-icon" style="position: absolute; right:0; width: 10px; height: 48px; border-radius: 8px 0px 0px 8px;"></div>
     </div>
 
     <Pagination class="mt-3" :links="products.links" />
@@ -79,15 +79,21 @@ export default {
         };
     },
     methods: {
-        destroy(id) {
+        destroyProduct(product) {
             if (confirm('Are you sure you want to delete this product ?')){
                 notify({
                     title: '<b>Delete</b>',
-                    text: 'The product has been successfully deleted',
+                    text: "The product '" + product.name + "' has been successfully deleted !",
                     type: 'success',
                 });
-                Inertia.delete(route('products.destroy', id));
-
+                Inertia.delete(route('products.destroy', product.id));
+            }
+            else {
+                notify({
+                    title: '<b>Delete</b>',
+                    text: "The product '" + product.name + "' has not been deleted ...",
+                    type: 'warn',
+                });
             }
         },
         removeFavorite(id) {
@@ -126,8 +132,6 @@ export default {
             return new Set(categories);
         },
         sortedArray: function() {
-            console.log(this.products.data);
-
             function compare(a, b) {
                 if (a < b)
                     return -1;
@@ -145,7 +149,19 @@ export default {
                 return product.category.name.includes(this.search);
             });
 
-            return filteredProducts.sort((a, b) => compare(days(a.created_at, a.category.expiration_days), days(b.created_at, b.category.expiration_days)));
+            return filteredProducts.sort((a, b) => compare(days(a.pivot.added_date, a.category.expiration_days), days(b.pivot.added_date, b.category.expiration_days)));
+        }
+    },
+    mounted() {
+        let updatedProduct = window.localStorage.getItem('update');
+        if (updatedProduct != null)
+        {
+            window.localStorage.removeItem('update');
+            notify({
+                title: '<b>Update</b>',
+                text: "The product '" + updatedProduct + "' has been successfully updated !",
+                type: 'success',
+            });
         }
     }
 }

@@ -10,6 +10,11 @@ class UserHas extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'quantity',
+        'added_date'
+    ];
+
     /**
      * Get the product associated with the User
      *

@@ -77,6 +77,8 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
+        // FIXME check if user has privileges to add or remove products
+
         $request->validate([
             'name' => 'required|min:5|max:25',
             'ean_code' => 'required|integer|gt:0',
@@ -89,17 +91,18 @@ class ProductController extends Controller
     }
 
     // TODO ne pas oublier d'ajouter la route, utiliser POST
-    public function updateUserProduct(Request $request, Product $product)
+    public function updateUserProduct(Request $request)
     {
         $user_has = UserHas::where([
             ['user_id', auth()->user()->id],
-            ['product_id', $product->id]
-        ])->first();
-
-        // $user_has->update();
-        var_dump($product);
-        return "";
-        //return redirect()->route('products.index');
+            ['product_id', $request->id]
+        ])->firstOrFail();
+        
+        $user_has->update(array(
+            //'quantity' => $request->quantity,
+            'added_date' => $request->added_date
+        ));
+        return redirect()->route('products.index');
     }
 
     /**
