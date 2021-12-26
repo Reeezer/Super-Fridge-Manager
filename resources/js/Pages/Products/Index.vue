@@ -30,10 +30,10 @@
         </div>
         <div class="d-flex align-items-center">
             <!-- Favorites -->
-            <button v-if="product.favorite" class="btn p-0" style="margin-right: 1rem;" @click="removeFavorite(product.id)">
+            <button v-if="isFavorite(product)" class="btn p-0" style="margin-right: 1rem;" @click="removeFavorite(product)">
                 <i class="bi bi-heart-fill"></i>
             </button>
-            <button v-else class="btn p-0" style="margin-right: 1rem;" @click="addFavorite(product.id)">
+            <button v-else class="btn p-0" style="margin-right: 1rem;" @click="addFavorite(product)">
                 <i class="bi bi-heart"></i>
             </button>
 
@@ -72,7 +72,7 @@ export default {
         Link,
         CategoryImage
     },
-    props: ["products"],
+    props: ["products", "favorites"],
     data() {
         return {
             search: "",
@@ -96,11 +96,11 @@ export default {
                 });
             }
         },
-        removeFavorite(id) {
-            Inertia.delete(route('favorites.destroy', 'products'));
+        removeFavorite(product) {
+            this.$inertia.post(route('products.favorite_delete'), product);
         },
-        addFavorite(id) {
-
+        addFavorite(product) {
+            this.$inertia.post(route('products.favorite_add'), product);
         },
         daysLeft(created_at, expiration_days) { // TODO Duplicate method
             const nbDays = new Date() - new Date(created_at);
@@ -121,9 +121,24 @@ export default {
         },
         selectCategory(category) {
             this.search = this.search.includes(category) ? "" : category;
+        },
+        isFavorite(product) {
+            return this.favoriteIDs.has(product.id);
         }
     },
     computed:{
+        favoriteIDs: function() {
+            // makes a set out of the favorites array so we can quickly check if a product has
+            // been favorited by the user
+
+            let ids = new Set();
+
+            for (let favorite in this.favorites) {
+                ids.add(this.favorites[favorite].pivot.product_id);
+            }
+
+            return ids;
+        },
         categories: function() {
             let categories = [];
             this.products.data.forEach(function(product) {

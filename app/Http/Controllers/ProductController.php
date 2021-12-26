@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Favorite;
 use App\Models\UserHas;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -16,10 +18,21 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = auth()->user()->products()->with('category', 'favorite')->latest()->paginate(20);
-        $favorites = auth()->user()->favorites()->with('category')->latest()->paginate(20);
-        // print_r($favorites);
-        return inertia('Products/Index', compact('products'));
+        // les produits que l'utilisateur a enregistré (via user_has)
+        $products = auth()
+            ->user()
+            ->products()
+            ->with('category')
+            ->latest()
+            ->paginate(20);
+
+        // les favoris de l'utilisateur (via favorites)
+        $favorites = auth()
+            ->user()
+            ->favorites()
+            ->get();
+
+        return inertia('Products/Index', compact('products', 'favorites'));
     }
 
     /**
@@ -69,8 +82,7 @@ class ProductController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
+     * 
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -102,6 +114,26 @@ class ProductController extends Controller
             //'quantity' => $request->quantity,
             'added_date' => $request->added_date
         ));
+        return redirect()->route('products.index');
+    }
+
+    public function deleteFavoriteProduct(Request $request)
+    {
+        $favorite = Favorite::where([
+            ['user_id', auth()->user()->id],
+            ['product_id', $request->id]
+        ])->delete();
+
+        return redirect()->route('products.index');
+    }
+
+    public function addFavoriteProduct(Request $request)
+    {
+        $user_id = auth()->user()->id;
+        $product_id = $request->id;
+
+        Favorite::create(compact('user_id', 'product_id'));
+
         return redirect()->route('products.index');
     }
 
