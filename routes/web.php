@@ -27,8 +27,6 @@ Route::get('/', function () {
 });
 
 Route::post('products/user_update', [ProductController::class, 'updateUserProduct'])->name('products.user_update');
-Route::post('products(favorite_add', [ProductController::class, 'addFavoriteProduct'])->name('products.favorite_add');
-Route::post('products/favorite_delete', [ProductController::class, 'deleteFavoriteProduct'])->name('products.favorite_delete');
 Route::resource('products', ProductController::class);
 
 Route::resource('favorites', FavoriteController::class);

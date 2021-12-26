@@ -97,10 +97,10 @@ export default {
             }
         },
         removeFavorite(product) {
-            this.$inertia.post(route('products.favorite_delete'), product);
+            Inertia.delete(route('favorites.destroy', product.id));
         },
         addFavorite(product) {
-            this.$inertia.post(route('products.favorite_add'), product);
+            Inertia.post(route('favorites.store'), product);
         },
         daysLeft(created_at, expiration_days) { // TODO Duplicate method
             const nbDays = new Date() - new Date(created_at);
