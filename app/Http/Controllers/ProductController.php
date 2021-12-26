@@ -99,7 +99,7 @@ class ProductController extends Controller
         ]);
 
         $product->update($request->all());
-        return redirect()->route('products.index');
+        return redirect()->back();
     }
 
     // TODO ne pas oublier d'ajouter la route, utiliser POST
@@ -114,27 +114,7 @@ class ProductController extends Controller
             //'quantity' => $request->quantity,
             'added_date' => $request->added_date
         ));
-        return redirect()->route('products.index');
-    }
-
-    public function deleteFavoriteProduct(Request $request)
-    {
-        $favorite = Favorite::where([
-            ['user_id', auth()->user()->id],
-            ['product_id', $request->id]
-        ])->delete();
-
-        return redirect()->route('products.index');
-    }
-
-    public function addFavoriteProduct(Request $request)
-    {
-        $user_id = auth()->user()->id;
-        $product_id = $request->id;
-
-        Favorite::create(compact('user_id', 'product_id'));
-
-        return redirect()->route('products.index');
+        return redirect()->back();
     }
 
     /**
@@ -148,6 +128,6 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $product->delete();
 
-        return redirect()->route('products.index');
+        return redirect()->back();
     }
 }
