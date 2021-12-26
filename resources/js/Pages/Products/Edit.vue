@@ -19,7 +19,9 @@
                         <div class="card-body">
                             <div class="form-row">
                                 <div class="form-group col-12 mt-3">
-                                    {{ product }}
+                                    <h2>
+                                        {{ product.name }}
+                                    </h2>
                                 </div>
                                 <div class="form-group col-12 mt-3">
                                     <InputDate
