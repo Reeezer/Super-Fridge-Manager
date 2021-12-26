@@ -1,5 +1,8 @@
 node_modules
-public
+
+public/*
+!public/resources
+
 storage/*.key
 vendor
 .env
