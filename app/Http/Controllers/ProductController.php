@@ -38,13 +38,13 @@ class ProductController extends Controller
     }
 
 
-    public function productFromEAN($ean)
-    {
-        $product_info = OpenFoodFacts::barcode($ean);
-
-        $final_name = "";
+    // FIXME add proper comment lol, shows the creation page but filled with correct infos from OFF
+    public function productInfoFromEAN(Request $request)
+    {   
+        $product_info = OpenFoodFacts::barcode($request->ean_code);
 
         // only add elements to the final name if their index is defined (using a php compact notation, haters gonna hate)
+        $final_name = "";
 
         if (($brand = $product_info["brands"] ?? null) != null)
             $final_name .= "$brand - ";
@@ -55,7 +55,7 @@ class ProductController extends Controller
         if (($quantity = $product_info["quantity"] ?? null) != null)
             $final_name .= " ($quantity)";
 
-        return var_dump($final_name);
+        return response()->json(["final_name" => $final_name]);
     }
 
     /**
@@ -136,6 +136,7 @@ class ProductController extends Controller
     }
 
     // TODO ne pas oublier d'ajouter la route, utiliser POST
+    // FIXME should we not use this anymore and upload productes and users id directly ?
     public function updateUserProduct(Request $request)
     {
         $user_has = UserHas::where([

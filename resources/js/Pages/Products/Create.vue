@@ -100,6 +100,7 @@ import BreezeAuthenticatedLayout from "@/Layouts/Authenticated.vue";
 import { Head, useForm, Link } from "@inertiajs/inertia-vue3";
 import InputLabel from "@/Components/Form/InputLabel.vue";
 import InputDate from "@/Components/Form/InputDate.vue";
+import { Inertia } from '@inertiajs/inertia'
 
 export default {
     components: {
@@ -110,14 +111,14 @@ export default {
         InputDate,
     },
 
-    props: ["categories"],
+    props: ["categories", "final_name", "ean_code"],
 
     data() {
         return {
             form: useForm({
-                name: null,
+                name: this.final_name,
                 category_id: null,
-                ean_code: null,
+                ean_code: this.ean_code,
                 created_at: new Date(),
             }),
         };
@@ -156,12 +157,40 @@ export default {
             );
 
             Quagga.onDetected(function (data) {
-                let inputEan = document.getElementById("inputEan_code")
-                inputEan.value = data.codeResult.code;
-                inputEan.dispatchEvent(new Event('input'));
                 Quagga.stop();
 
-                document.getElementById("camera").style.display = "none";
+                const options = {
+                    method : 'post',
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json",
+                        "X-Requested-With": "XMLHttpRequest",
+                        "X-CSRF-Token": document.head.querySelector("[name~=csrf-token][content]").content
+                    },
+                    credentials: "same-origin",
+                    body : JSON.stringify({ ean_code : data.codeResult.code }),
+                };
+
+                fetch(route('products.fetch_remote'), options)
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.final_name !== "")
+                        {
+                            document.getElementById("camera").style.display = "none";
+
+                            let inputEan = document.getElementById("inputEan_code")
+                            inputEan.value = data.codeResult.code;
+                            inputEan.dispatchEvent(new Event('input'));
+
+                            let inputName = document.getElementById("inputName")
+                            inputName.value = result.final_name;
+                            inputName.dispatchEvent(new Event('input'));
+                        }
+                        else
+                        {
+                            Quagga.start();
+                        }
+                    });
             });
         },
     },
