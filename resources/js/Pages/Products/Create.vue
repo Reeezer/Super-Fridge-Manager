@@ -8,8 +8,13 @@
 
         <Link :href="route('products.index')" class="btn btn-primary mb-2">Back</Link>
 
+        <div class="row">
+            <div class="col-12 offset-0 offset-lg-3">
+                <div id="camera"></div>
+            </div>
+        </div>
+
         <form @submit.prevent="form.post(route('products.store'))">
-          <div id="camera"></div>
             <div class="row">
                 <div class="col-12 col-lg-6 offset-0 offset-lg-3">
                     <div class="card">
@@ -120,6 +125,8 @@ export default {
 
     methods: {
         greet(event) {
+            document.getElementById("camera").style.display = "block";
+
             Quagga.init(
                 {
                     inputStream: {
@@ -153,6 +160,8 @@ export default {
                 inputEan.value = data.codeResult.code;
                 inputEan.dispatchEvent(new Event('input'));
                 Quagga.stop();
+
+                document.getElementById("camera").style.display = "none";
             });
         },
     },
