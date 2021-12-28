@@ -9,6 +9,8 @@ use App\Models\UserHas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+use OpenFoodFacts\Laravel\Facades\OpenFoodFacts;
+
 class ProductController extends Controller
 {
     /**
@@ -35,6 +37,27 @@ class ProductController extends Controller
         return inertia('Products/Index', compact('products', 'favorites'));
     }
 
+
+    public function productFromEAN($ean)
+    {
+        $product_info = OpenFoodFacts::barcode($ean);
+
+        $final_name = "";
+
+        // only add elements to the final name if their index is defined (using a php compact notation, haters gonna hate)
+
+        if (($brand = $product_info["brands"] ?? null) != null)
+            $final_name .= "$brand - ";
+        
+        if (($product_name = $product_info["product_name"] ?? null) != null)
+            $final_name .= "$product_name";
+
+        if (($quantity = $product_info["quantity"] ?? null) != null)
+            $final_name .= " ($quantity)";
+
+        return var_dump($final_name);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -42,7 +65,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        // FIXME move this to store, and show an actual form here
+        return $this->productFromEAN('7610104021868');
     }
 
     /**
@@ -53,7 +77,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**
