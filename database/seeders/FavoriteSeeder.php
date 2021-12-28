@@ -19,7 +19,7 @@ class FavoriteSeeder extends Seeder
             ["user_id" => 1, "product_name" => "Some sort of old Cheese"],
             ["user_id" => 1, "product_name" => "Surimi"],
             ["user_id" => 1, "product_name" => "Granolla"],
-
+            ["user_id" => 2, "product_name" => "Some sort of old Cheese"]
         ];
 
         foreach ($favorites as $favorite) {

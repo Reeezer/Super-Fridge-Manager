@@ -5,16 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+// used to seed the database, not elsewhere
+class Favorite extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name', 'expiration_days'
+        'user_id', 'product_id'
     ];
 
-    public function products()
-    {
-        return $this->hasMany(Product::class);
-    }
 }

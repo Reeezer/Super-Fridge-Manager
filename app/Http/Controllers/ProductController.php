@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Favorite;
 use App\Models\UserHas;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+use OpenFoodFacts\Laravel\Facades\OpenFoodFacts;
 
 class ProductController extends Controller
 {
@@ -16,8 +20,42 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = auth()->user()->products()->with('category')->latest()->paginate(20);
-        return inertia('Products/Index', compact('products'));
+        // les produits que l'utilisateur a enregistré (via user_has)
+        $products = auth()
+            ->user()
+            ->products()
+            ->with('category')
+            ->latest()
+            ->paginate(20);
+
+        // les favoris de l'utilisateur (via favorites)
+        $favorites = auth()
+            ->user()
+            ->favorites()
+            ->get();
+
+        return inertia('Products/Index', compact('products', 'favorites'));
+    }
+
+
+    public function productFromEAN($ean)
+    {
+        $product_info = OpenFoodFacts::barcode($ean);
+
+        $final_name = "";
+
+        // only add elements to the final name if their index is defined (using a php compact notation, haters gonna hate)
+
+        if (($brand = $product_info["brands"] ?? null) != null)
+            $final_name .= "$brand - ";
+        
+        if (($product_name = $product_info["product_name"] ?? null) != null)
+            $final_name .= "$product_name";
+
+        if (($quantity = $product_info["quantity"] ?? null) != null)
+            $final_name .= " ($quantity)";
+
+        return var_dump($final_name);
     }
 
     /**
@@ -59,7 +97,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        $product = auth()->user()->products()->with('category')->where('id', $product->id)->firstOrFail();
+        $product = auth()->user()->products()->with('category')->where('product_id', $product->id)->firstOrFail();
         return inertia('Products/Show', compact('product'));
     }
 
@@ -72,19 +110,20 @@ class ProductController extends Controller
     public function edit($id)
     {
         $categories = Category::all();
-        $product = auth()->user()->products()->with('category')->where('id', $id)->firstOrFail();
+        $product = auth()->user()->products()->with('category')->where('product_id', $id)->firstOrFail();
         return inertia('Products/Edit', ['product' => $product, 'categories' => $categories]);
     }
 
     /**
-     * Update the specified resource in storage.
-     *
+     * 
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Product $product)
     {
+        // FIXME check if user has privileges to add or remove products
+
         $request->validate([
             'name' => 'required|min:5|max:25',
             'ean_code' => 'required|integer|gt:0',
@@ -92,16 +131,23 @@ class ProductController extends Controller
             'created_at' => 'required'
         ]);
 
-        // $user_has = UserHas::where([
-        //     ['user_id', auth()->user()->id],
-        //     ['product_id', $product->id]
-        // ])->firstOrFail();
-
-        // $user_has->update();
-
         $product->update($request->all());
+        return redirect()->back();
+    }
 
-        return redirect()->route('products.index')->with('success','Product updated successfully'); // TODO Remove with
+    // TODO ne pas oublier d'ajouter la route, utiliser POST
+    public function updateUserProduct(Request $request)
+    {
+        $user_has = UserHas::where([
+            ['user_id', auth()->user()->id],
+            ['product_id', $request->id]
+        ])->firstOrFail();
+        
+        $user_has->update(array(
+            //'quantity' => $request->quantity,
+            'added_date' => $request->added_date
+        ));
+        return redirect()->back();
     }
 
     /**
@@ -115,6 +161,6 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $product->delete();
 
-        return redirect()->route('products.index')->with('success','Product deleted successfully'); // TODO Remove with
+        return redirect()->back();
     }
 }
