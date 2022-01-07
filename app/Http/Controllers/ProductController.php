@@ -40,7 +40,7 @@ class ProductController extends Controller
 
     // FIXME add proper comment lol, shows the creation page but filled with correct infos from OFF
     public function productInfoFromEAN(Request $request)
-    {   
+    {
         $product_info = OpenFoodFacts::barcode($request->ean_code);
 
         // only add elements to the final name if their index is defined (using a php compact notation, haters gonna hate)
@@ -48,7 +48,7 @@ class ProductController extends Controller
 
         if (($brand = $product_info["brands"] ?? null) != null)
             $final_name .= "$brand - ";
-        
+
         if (($product_name = $product_info["product_name"] ?? null) != null)
             $final_name .= "$product_name";
 
@@ -115,7 +115,7 @@ class ProductController extends Controller
     }
 
     /**
-     * 
+     *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -143,12 +143,19 @@ class ProductController extends Controller
             ['user_id', auth()->user()->id],
             ['product_id', $request->id]
         ])->firstOrFail();
-        
+
         $user_has->update(array(
             //'quantity' => $request->quantity,
             'added_date' => $request->added_date
         ));
         return redirect()->back();
+    }
+
+    // returns a list of products that match the name as json (API endpoint)
+    public function searchByName(Request $request)
+    {
+        $products = Product::where('name', 'like', '%' . $request->name . '%')->limit(10)->get();
+        return response()->json(["products" => $products]);
     }
 
     /**

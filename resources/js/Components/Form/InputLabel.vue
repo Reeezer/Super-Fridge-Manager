@@ -2,7 +2,9 @@
     <label :for="inputId" class="mb-1">{{ labelText }}</label>
     <input
         :value="modelValue"
-        @input="$emit('update:modelValue', $event.target.value)"
+        v-on:input="$emit('update:modelValue', $event.target.value); onChange();"
+        v-on:blur="onLoseFocus"
+        v-on:click="onGainFocus"
         type="text"
         class="form-control"
         :class="formError ? 'is-invalid' : ''"
@@ -21,7 +23,19 @@ export default {
 
     props: ['modelValue', 'inputId', 'labelText', 'formError'],
 
-    emits: ['update:modelValue'],
+    emits: ['update:modelValue', 'onChange', 'onLoseFocus', 'onGainFocus'],
+
+    methods: {
+        onChange(){
+            this.$emit("onChange");
+        },
+        onLoseFocus(){
+            this.$emit("onLoseFocus");
+        },
+        onGainFocus(){
+            this.$emit("onGainFocus");
+        }
+    }
 }
 </script>
 

@@ -5,7 +5,7 @@ import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/inertia-vue3';
 import { InertiaProgress } from '@inertiajs/progress';
 import "bootstrap-icons/font/bootstrap-icons.css";
-import Notifications from '@kyvg/vue3-notification'
+import Notifications from '@kyvg/vue3-notification';
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 
