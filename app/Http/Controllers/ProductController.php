@@ -78,7 +78,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|min:5|max:25',
+            'name' => 'required|min:5|max:50',
             'ean_code' => 'required|integer|gt:0',
             'category_id' => 'required|integer|exists:categories,id',
             'created_at' => 'required'
@@ -87,6 +87,36 @@ class ProductController extends Controller
         Product::create($request->all());
 
         return redirect()->route('products.index')->with('success','Product created successfully.');
+    }
+
+    public function storeUserProduct(Request $request)
+    {
+        $product_request = Product::where(
+            ['name' => $request->name]
+        )->get();
+
+        if ($product_request->isEmpty())
+        {
+            $request->validate([
+                'name' => 'required|min:5|max:50',
+                'ean_code' => 'required|integer|gt:0',
+                'category_id' => 'required|integer|exists:categories,id',
+                'created_at' => 'required'
+            ]);
+            Product::create($request->all());
+        }
+
+        $product = Product::where(
+            ['name' => $request->name]
+        )->firstOrFail();
+
+        UserHas::create([
+            'user_id' => auth()->user()->id,
+            'product_id' => $product->id,
+            'added_date' => date("Y-m-d", strtotime($request->created_at))
+        ]);
+
+        return redirect()->route('products.index');
     }
 
     /**
@@ -136,7 +166,6 @@ class ProductController extends Controller
     }
 
     // TODO ne pas oublier d'ajouter la route, utiliser POST
-    // FIXME should we not use this anymore and upload productes and users id directly ?
     public function updateUserProduct(Request $request)
     {
         $user_has = UserHas::where([

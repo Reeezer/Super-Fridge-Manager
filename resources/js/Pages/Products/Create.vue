@@ -14,7 +14,7 @@
             </div>
         </div>
 
-        <form @submit.prevent="form.post(route('products.store'))" autocomplete="off">
+        <form @submit.prevent="form.post(route('products.user_store'))" autocomplete="off">
             <div class="row">
                 <div class="col-12 col-lg-6 offset-0 offset-lg-3">
                     <div class="card">
@@ -30,7 +30,7 @@
                                         @onGainFocus="searchByName"
                                     />
                                     <div style="position: relative">
-                                        <div v-for="(product, index) in productsFromSearch" :key="product.id" class="dropdown"
+                                        <div v-for="(product, index) in productsFromSearch" :key="product.id" class="dropdownName"
                                         :style="'top: ' + ((index++) * 25) + 'px;'"
                                         v-on:click="productSelected(product); loseFocus();">
                                             {{ product.name }}
@@ -154,8 +154,6 @@ export default {
 
                     for (let product in result.products)
                         this.productsFromSearch.add(result.products[product]);
-
-                    console.log("search", this.productsFromSearch);
                 });
         },
         loseFocus() {
@@ -171,6 +169,10 @@ export default {
             let select = document.getElementById('select_category');
             select.value = product.category_id;
             select.dispatchEvent(new Event('change'));
+
+            let inputEan = document.getElementById("inputEan_code");
+            inputEan.value = product.ean_code;
+            inputEan.dispatchEvent(new Event('input'));
         },
         setupScanner() {
             document.getElementById("camera").style.display = "block";
@@ -219,9 +221,11 @@ export default {
                 fetch(route('products.fetch_remote'), options)
                     .then(response => response.json())
                     .then(result => {
+                        console.log(result);
                         if (result.final_name !== "")
                         {
                             document.getElementById("camera").style.display = "none";
+                            this.focusLost = true;
 
                             let inputEan = document.getElementById("inputEan_code");
                             inputEan.value = data.codeResult.code;
@@ -245,7 +249,7 @@ export default {
 
 <style>
 
-.dropdown {
+.dropdownName {
     position: absolute;
     background-color: #f9f9f9;
     border-radius: 4px;
@@ -256,7 +260,7 @@ export default {
     z-index: 1000;
 }
 
-.dropdown:hover {
+.dropdownName:hover {
     border: 1px solid #bdbdbd;
     background-color: #f0f0f0 ;
     cursor: pointer;
