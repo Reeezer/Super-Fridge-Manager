@@ -27,6 +27,9 @@ Route::get('/', function () {
 });
 
 Route::post('products/user_update', [ProductController::class, 'updateUserProduct'])->name('products.user_update');
+Route::post('products/fetch_remote', [ProductController::class, 'productInfoFromEAN'])->name('products.fetch_remote');
+Route::post('products/search_name', [ProductController::class, 'searchByName'])->name('products.search_name');
+Route::post('products/user_store', [ProductController::class, 'storeUserProduct'])->name('products.user_store');
 Route::resource('products', ProductController::class);
 
 Route::resource('favorites', FavoriteController::class);

@@ -19,11 +19,14 @@
 
     <h1 class="mb-3">Products</h1>
 
-    <div v-for="product in sortedArray" :key="product.id" class="d-flex align-items-center justify-content-between mb-1 p-2" :style="'border-radius: 12px; position: relative; background-color: ' + getPastelColor(product.category.name) + ';'" >
+    <div v-for="product in sortedArray" :key="product.id" class="d-flex align-items-center justify-content-between mb-1 p-2 product" :style="'background-color:' + getPastelColor(product.category.name) + ';'" >
         <div class="d-flex align-items-center">
+            <!-- Category -->
             <div style="margin-right: 1rem;">
                 <CategoryImage :category="product.category.name"></CategoryImage>
             </div>
+
+            <!-- Product name -->
             <Link class="btn p-0" :href="route('products.show', product.id)">
                 <div>{{ product.name }}</div>
             </Link>
@@ -42,14 +45,17 @@
                 <i class="bi bi-x-lg"></i>
             </button>
 
+            <!-- Edit -->
             <Link class="btn p-0" style="margin-right: 1rem;" :href="route('products.edit', product.id)">
                 <i class="bi bi-pencil"></i>
             </Link>
+
+            <!-- Expiration -->
             <div class="expiration-date" style="margin-right: 0.5rem;" :style="[daysLeft(product.pivot.added_date, product.category.expiration_days) <= 3 ? {'color':'red'} : {}]">
                 {{ daysLeft(product.pivot.added_date, product.category.expiration_days) }} d
             </div>
         </div>
-        <div v-if="daysLeft(product.pivot.added_date, product.category.expiration_days) <= 3" class="bg-danger expiration-icon" style="position: absolute; right:0; width: 10px; height: 48px; border-radius: 8px 0px 0px 8px;"></div>
+        <div v-if="daysLeft(product.pivot.added_date, product.category.expiration_days) <= 3" class="bg-danger expiration-icon expirationIcon"></div>
     </div>
 
     <Pagination class="mt-3" :links="products.links" />
@@ -182,3 +188,20 @@ export default {
 }
 
 </script>
+
+<style>
+
+.product {
+    border-radius: 12px;
+    position: relative;
+}
+
+.expirationIcon {
+    position: absolute;
+    right: 0;
+    width: 10px;
+    height: 48px;
+    border-radius: 8px 0px 0px 8px;
+}
+
+</style>

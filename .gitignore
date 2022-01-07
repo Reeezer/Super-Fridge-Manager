@@ -2,6 +2,10 @@ node_modules
 
 public/*
 !public/resources
+!public/.htaccess
+!public/index.php
+!public/robots.txt
+!public/web.config
 
 storage/*.key
 vendor

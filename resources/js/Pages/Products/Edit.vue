@@ -6,13 +6,11 @@
             <h2 class="h4 font-weight-bold">Modify a product</h2>
         </template>
 
-        <Link :href="route('products.index')" class="btn btn-primary mb-2"
-            >Back</Link
-        >
+        <Link :href="route('products.index')" class="btn btn-primary mb-2">
+        Back
+        </Link>
 
-        <form
-            @submit.prevent="submit"
-        >
+        <form @submit.prevent="submit">
             <div class="row">
                 <div class="col-12 col-lg-6 offset-0 offset-lg-3">
                     <div class="card">
@@ -32,11 +30,7 @@
                                     />
                                 </div>
 
-                                <button
-                                    type="submit"
-                                    class="btn btn-primary mt-3"
-                                    :disabled="form.processing"
-                                >
+                                <button type="submit" class="btn btn-primary mt-3" :disabled="form.processing">
                                     Modifier
                                 </button>
                             </div>
