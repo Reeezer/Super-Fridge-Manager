@@ -6,7 +6,7 @@
             <h2 class="h4 font-weight-bold">Add a product</h2>
         </template>
 
-        <Link :href="route('products.index')" class="btn btn-primary mb-2">Back</Link>
+        <Link :href="route('products.index')" class="btn btn-primary mb-2" @click="cancel">Back</Link>
 
         <div class="row">
             <div class="col-12 offset-0 offset-lg-3">
@@ -14,7 +14,7 @@
             </div>
         </div>
 
-        <form @submit.prevent="form.post(route('products.user_store'))" autocomplete="off">
+        <form @submit.prevent="submit(); form.post(route('products.user_store'));" autocomplete="off">
             <div class="row">
                 <div class="col-12 col-lg-6 offset-0 offset-lg-3">
                     <div class="card">
@@ -134,6 +134,12 @@ export default {
         });
     },
     methods: {
+        submit(){
+            window.localStorage.setItem('createSuccess', this.form.name);
+        },
+        cancel(){
+            window.localStorage.setItem('createCancel', "nothing");
+        },
         searchByName() {
             if (this.focusLost){
                 this.focusLost = false;

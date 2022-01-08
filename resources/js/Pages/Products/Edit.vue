@@ -6,7 +6,7 @@
             <h2 class="h4 font-weight-bold">Modify a product</h2>
         </template>
 
-        <Link :href="route('products.index')" class="btn btn-primary mb-2">
+        <Link :href="route('products.index')" class="btn btn-primary mb-2" @click="cancel">
             Back
         </Link>
 
@@ -73,8 +73,12 @@ export default {
 
     methods: {
         submit() {
+            window.localStorage.setItem('updateSuccess', this.form.name);
             this.$inertia.post(route('products.user_update'), this.form);
         },
+        cancel(){
+            window.localStorage.setItem('updateCancel', "canceled");
+        }
     },
 };
 </script>

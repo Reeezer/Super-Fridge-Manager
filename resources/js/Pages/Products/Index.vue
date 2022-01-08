@@ -102,9 +102,28 @@ export default {
             }
         },
         removeFavorite(product) {
-            Inertia.delete(route('favorites.destroy', product.id));
+            if (confirm('Are you sure you want to remove this product from favorites ?')){
+                notify({
+                    title: '<b>Remove favorite</b>',
+                    text: "The product '" + product.name + "' has been successfully removed from favorites !",
+                    type: 'success',
+                });
+                Inertia.delete(route('favorites.destroy', product.id));
+            }
+            else {
+                notify({
+                    title: '<b>Remove favorite</b>',
+                    text: "The product '" + product.name + "' has not been removed from favorites ...",
+                    type: 'warn',
+                });
+            }
         },
         addFavorite(product) {
+            notify({
+                title: '<b>Add favorite</b>',
+                text: "The product '" + product.name + "' has been successfully added to favorites !",
+                type: 'success',
+            });
             Inertia.post(route('favorites.store'), product);
         },
         daysLeft(created_at, expiration_days) { // TODO Duplicate method
@@ -173,14 +192,47 @@ export default {
         }
     },
     mounted() {
-        let updatedProduct = window.localStorage.getItem('update');
-        if (updatedProduct != null)
+        let updateSuccess = window.localStorage.getItem('updateSuccess');
+        if (updateSuccess != null)
         {
-            window.localStorage.removeItem('update');
+            window.localStorage.removeItem('updateSuccess');
             notify({
                 title: '<b>Update</b>',
-                text: "The product '" + updatedProduct + "' has been successfully updated !",
+                text: "The product '" + updateSuccess + "' has been successfully updated !",
                 type: 'success',
+            });
+        }
+
+        let updateCancel = window.localStorage.getItem('updateCancel');
+        if (updateCancel != null)
+        {
+            window.localStorage.removeItem('updateCancel');
+            notify({
+                title: '<b>Update</b>',
+                text: "The product '" + updateCancel + "' has not been updated ...",
+                type: 'warn',
+            });
+        }
+
+        let createSuccess = window.localStorage.getItem('createSuccess');
+        if (createSuccess != null)
+        {
+            window.localStorage.removeItem('createSuccess');
+            notify({
+                title: '<b>Create</b>',
+                text: "The product '" + createSuccess + "' has been successfully added !",
+                type: 'success',
+            });
+        }
+
+        let createCancel = window.localStorage.getItem('createCancel');
+        if (createCancel != null)
+        {
+            window.localStorage.removeItem('createCancel');
+            notify({
+                title: '<b>Create</b>',
+                text: "No product has been added ...",
+                type: 'warn',
             });
         }
     }
