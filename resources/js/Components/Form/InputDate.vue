@@ -7,7 +7,7 @@
         class="form-control"
         :class="formError ? 'is-invalid' : '' + ' bg-light'"
         :id="inputId"
-    >
+    required>
     <BreezeInputError :message="formError" />
 </template>
 

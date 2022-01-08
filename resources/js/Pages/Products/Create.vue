@@ -128,6 +128,11 @@ export default {
             focusLost: false
         };
     },
+    mounted() {
+        Inertia.on('start', (event) => {
+            Quagga.stop();
+        });
+    },
     methods: {
         searchByName() {
             if (this.focusLost){
@@ -242,8 +247,8 @@ export default {
                     }
                 );
             });
-        },
-    },
+        }
+    }
 };
 </script>
 

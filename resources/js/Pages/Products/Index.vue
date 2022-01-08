@@ -41,7 +41,7 @@
             </button>
 
             <!-- Remove -->
-            <button class="btn p-0" style="margin-right: 1rem;" @click="destroy(product.id)">
+            <button class="btn p-0" style="margin-right: 1rem;" @click="destroyProduct(product)">
                 <i class="bi bi-x-lg"></i>
             </button>
 
@@ -57,7 +57,6 @@
         </div>
         <div v-if="daysLeft(product.pivot.added_date, product.category.expiration_days) <= 3" class="bg-danger expiration-icon expirationIcon"></div>
     </div>
-
     <Pagination class="mt-3" :links="products.links" />
   </breeze-authenticated-layout>
 </template>
@@ -92,7 +91,7 @@ export default {
                     text: "The product '" + product.name + "' has been successfully deleted !",
                     type: 'success',
                 });
-                Inertia.delete(route('products.destroy', product.id));
+                Inertia.delete(route('products.user_delete', product));
             }
             else {
                 notify({

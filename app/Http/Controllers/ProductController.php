@@ -119,6 +119,18 @@ class ProductController extends Controller
         return redirect()->route('products.index');
     }
 
+    public function deleteUserProduct(Request $request)
+    {
+        $user_has = UserHas::where([
+            'product_id' => $request->id,
+            'user_id' => auth()->user()->id
+        ])->firstOrFail();
+
+        $user_has->delete();
+
+        return redirect()->back();
+    }
+
     /**
      * Display the specified resource.
      *
@@ -165,9 +177,12 @@ class ProductController extends Controller
         return redirect()->back();
     }
 
-    // TODO ne pas oublier d'ajouter la route, utiliser POST
     public function updateUserProduct(Request $request)
     {
+        $request->validate([ // FIXME fill the rest of the properties
+            'added_date' => 'required'
+        ]);
+
         $user_has = UserHas::where([
             ['user_id', auth()->user()->id],
             ['product_id', $request->id]
@@ -177,7 +192,8 @@ class ProductController extends Controller
             //'quantity' => $request->quantity,
             'added_date' => $request->added_date
         ));
-        return redirect()->back();
+
+        return redirect()->route('products.index');
     }
 
     // returns a list of products that match the name as json (API endpoint)

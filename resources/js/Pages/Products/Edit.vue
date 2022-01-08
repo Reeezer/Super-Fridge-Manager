@@ -7,7 +7,7 @@
         </template>
 
         <Link :href="route('products.index')" class="btn btn-primary mb-2">
-        Back
+            Back
         </Link>
 
         <form @submit.prevent="submit">

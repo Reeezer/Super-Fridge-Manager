@@ -30,6 +30,7 @@ Route::post('products/user_update', [ProductController::class, 'updateUserProduc
 Route::post('products/fetch_remote', [ProductController::class, 'productInfoFromEAN'])->name('products.fetch_remote');
 Route::post('products/search_name', [ProductController::class, 'searchByName'])->name('products.search_name');
 Route::post('products/user_store', [ProductController::class, 'storeUserProduct'])->name('products.user_store');
+Route::delete('products/user_delete', [ProductController::class, 'deleteUserProduct'])->name('products.user_delete');
 Route::resource('products', ProductController::class);
 
 Route::resource('favorites', FavoriteController::class);
