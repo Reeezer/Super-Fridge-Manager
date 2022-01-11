@@ -15,8 +15,6 @@ class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -38,7 +36,9 @@ class ProductController extends Controller
     }
 
 
-    // FIXME add proper comment lol, shows the creation page but filled with correct infos from OFF
+    /**
+     * shows the creation page but filled with correct infos from OFF
+     */
     public function productInfoFromEAN(Request $request)
     {
         $product_info = OpenFoodFacts::barcode($request->ean_code);
@@ -59,9 +59,7 @@ class ProductController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Show the form for creating a new resource
      */
     public function create()
     {
@@ -73,7 +71,6 @@ class ProductController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
@@ -89,6 +86,11 @@ class ProductController extends Controller
         return redirect()->route('products.index')->with('success','Product created successfully.');
     }
 
+    /**
+     * Stores a product using the N-N relation table UserHas. It first checks if a product with the exact
+     * name already exists, and if yes it just uses it (that means once a product has been added it cannot
+     * be modified). If not, it creates it according to the given info.
+     */
     public function storeUserProduct(Request $request)
     {
         $product_request = Product::where(
@@ -119,6 +121,9 @@ class ProductController extends Controller
         return redirect()->route('products.index');
     }
 
+    /**
+     * Deletes a product from the UserHas relation table for that user, if it is present.
+     */
     public function deleteUserProduct(Request $request)
     {
         $user_has = UserHas::where([
@@ -132,10 +137,9 @@ class ProductController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Displays the product details from the UserHas table
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function show(Product $product)
     {
@@ -144,10 +148,9 @@ class ProductController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified product in the UserHas table.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
@@ -157,14 +160,13 @@ class ProductController extends Controller
     }
 
     /**
-     *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Product $product)
     {
-        // FIXME check if user has privileges to add or remove products
+        // TODO we should check if user has privileges to edit products,
+        // there's no UI element that allows this but the endpoint still exists
 
         $request->validate([
             'name' => 'required|min:5|max:25',
@@ -176,10 +178,12 @@ class ProductController extends Controller
         $product->update($request->all());
         return redirect()->back();
     }
-
+    /**
+     * Updates the product in the UserHas table
+     */
     public function updateUserProduct(Request $request)
     {
-        $request->validate([ // FIXME fill the rest of the properties
+        $request->validate([
             'added_date' => 'required'
         ]);
 
@@ -196,7 +200,9 @@ class ProductController extends Controller
         return redirect()->route('products.index');
     }
 
-    // returns a list of products that match the name as json (API endpoint)
+    /** 
+     * Returns a list of products that match the name as json (API endpoint)
+     */ 
     public function searchByName(Request $request)
     {
         $products = Product::where('name', 'like', '%' . $request->name . '%')->limit(10)->get();
@@ -207,10 +213,11 @@ class ProductController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
+        // TODO we should check if user has privileges to remove products,
+        // there's no UI element that allows this but the endpoint still exists
         $product = Product::findOrFail($id);
         $product->delete();
 
