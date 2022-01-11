@@ -126,7 +126,7 @@ export default {
             });
             Inertia.post(route('favorites.store'), product);
         },
-        daysLeft(created_at, expiration_days) { // TODO Duplicate method
+        daysLeft(created_at, expiration_days) { // TODO Duplicate method (called days in mounted())
             const nbDays = new Date() - new Date(created_at);
             return expiration_days - Math.floor(nbDays / (1000 * 3600 * 24));
         },
@@ -179,7 +179,7 @@ export default {
                 return 0;
             }
 
-            function days(created_at, expiration_days) { // TODO Duplicate method
+            function days(created_at, expiration_days) { // TODO Duplicate method (called daysLeft above)
                 const nbDays = new Date() - new Date(created_at);
                 return expiration_days - Math.floor(nbDays / (1000 * 3600 * 24));
             }
